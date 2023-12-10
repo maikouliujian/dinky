@@ -166,6 +166,7 @@ import cn.hutool.core.util.StrUtil;
  * @author wenmo
  * @since 2021-05-24
  */
+//todo 提交任务！！！！！！
 @Service
 public class TaskServiceImpl extends SuperServiceImpl<TaskMapper, Task> implements TaskService {
 
@@ -224,7 +225,7 @@ public class TaskServiceImpl extends SuperServiceImpl<TaskMapper, Task> implemen
         return "--id " + id + " --driver " + driver + " --url " + url + " --username " + username + " --password "
                 + password + " --dinkyAddr " + dinkyAddr;
     }
-
+    //todo 提交任务！！！！！！
     @Override
     public JobResult submitTask(Integer id) {
         Task task = this.getTaskInfoById(id);

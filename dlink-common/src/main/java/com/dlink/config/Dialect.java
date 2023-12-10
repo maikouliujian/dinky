@@ -27,6 +27,7 @@ import com.dlink.assertion.Asserts;
  * @author wenmo
  * @since 2021/12/13
  **/
+//todo 支持的任务类型
 public enum Dialect {
 
     FLINKSQL("FlinkSql"),

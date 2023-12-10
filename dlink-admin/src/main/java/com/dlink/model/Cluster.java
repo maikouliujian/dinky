@@ -42,6 +42,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("dlink_cluster")
+//todo 本地维护集群！！！！！！
 public class Cluster extends SuperEntity {
 
     private static final long serialVersionUID = 3104721227014487321L;

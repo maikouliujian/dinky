@@ -202,6 +202,7 @@ public class JobManager {
     }
 
     private static void initGatewayConfig(JobConfig config) {
+        //todo gateway提交
         if (useGateway(config.getType())) {
             Asserts.checkNull(config.getGatewayConfig(), "GatewayConfig 不能为空");
             config.getGatewayConfig().setType(GatewayType.get(config.getType()));
@@ -220,6 +221,7 @@ public class JobManager {
     private Executor createExecutor() {
         initEnvironmentSetting();
         if (!runMode.equals(GatewayType.LOCAL) && !useGateway && config.isUseRemote()) {
+            //todo
             executor = Executor.buildRemoteExecutor(environmentSetting, config.getExecutorSetting());
         } else {
             if (ArrayUtil.isNotEmpty(config.getJarFiles())) {
@@ -250,6 +252,7 @@ public class JobManager {
                 SessionPool.push(new ExecutorEntity(config.getSession(), executor));
             }
         } else {
+            //todo
             createExecutor();
         }
         executor.getSqlManager().registerSqlFragment(config.getVariables());

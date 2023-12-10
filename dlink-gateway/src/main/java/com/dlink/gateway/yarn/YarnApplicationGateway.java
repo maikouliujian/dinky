@@ -109,6 +109,7 @@ public class YarnApplicationGateway extends YarnGateway {
             ClusterClientProvider<ApplicationId> clusterClientProvider = yarnClusterDescriptor.deployApplicationCluster(
                     clusterSpecificationBuilder.createClusterSpecification(),
                     applicationConfiguration);
+            //todo 获取job信息
             ClusterClient<ApplicationId> clusterClient = clusterClientProvider.getClusterClient();
             Collection<JobStatusMessage> jobStatusMessages = clusterClient.listJobs().get();
             int counts = SystemConfiguration.getInstances().getJobIdWait();
