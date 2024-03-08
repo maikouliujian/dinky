@@ -71,7 +71,7 @@ public interface Gateway {
     void setGatewayConfig(GatewayConfig config);
 
     GatewayResult submitJobGraph(JobGraph jobGraph);
-
+    //todo 提交flink jar任务
     GatewayResult submitJar();
 
     SavePointResult savepointCluster();

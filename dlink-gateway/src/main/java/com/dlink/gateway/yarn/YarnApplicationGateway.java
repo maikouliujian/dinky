@@ -124,6 +124,7 @@ public class YarnApplicationGateway extends YarnGateway {
             if (jobStatusMessages.size() > 0) {
                 List<String> jids = new ArrayList<>();
                 for (JobStatusMessage jobStatusMessage : jobStatusMessages) {
+                    //todo 获取jobids
                     jids.add(jobStatusMessage.getJobId().toHexString());
                 }
                 result.setJids(jids);

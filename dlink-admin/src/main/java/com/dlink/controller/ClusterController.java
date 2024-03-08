@@ -188,7 +188,7 @@ public class ClusterController {
         }
         return Result.succeed("Kill cluster succeed.");
     }
-
+    //todo session模式，启动集群和提交job是分离的，per-job和application启动集群和提交job是一起的！！！！！！
     /**
      * 启动 Session 集群
      */

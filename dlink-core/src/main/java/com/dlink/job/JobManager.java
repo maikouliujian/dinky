@@ -559,6 +559,7 @@ public class JobManager {
                             jobGraph.setSavepointRestoreSettings(
                                     SavepointRestoreSettings.forPath(config.getSavePointPath(), true));
                         }
+                        //todo perjob提交，需要指定jobGraph
                         gatewayResult = Gateway.build(config.getGatewayConfig()).submitJobGraph(jobGraph);
                     }
                     job.setResult(InsertResult.success(gatewayResult.getAppId()));
@@ -761,13 +762,14 @@ public class JobManager {
     public static GatewayResult deploySessionCluster(GatewayConfig gatewayConfig) {
         return Gateway.build(gatewayConfig).deployCluster();
     }
-
+    //todo 提交flink jar任务
     public JobResult executeJar() {
         ProcessEntity process = ProcessContextHolder.getProcess();
         Job job = Job.init(runMode, config, executorSetting, executor, null, useGateway);
         JobContextHolder.setJob(job);
         ready();
         try {
+            //todo
             GatewayResult gatewayResult = Gateway.build(config.getGatewayConfig()).submitJar();
             job.setResult(InsertResult.success(gatewayResult.getAppId()));
             job.setJobId(gatewayResult.getAppId());

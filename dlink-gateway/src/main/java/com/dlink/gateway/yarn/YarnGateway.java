@@ -140,7 +140,7 @@ public abstract class YarnGateway extends AbstractGateway {
         }
         YarnLogConfigUtil.setLogConfigFileInConfig(configuration, config.getClusterConfig().getFlinkConfigPath());
     }
-
+    //todo 初始化YarnClient
     private void initYarnClient() {
         yarnConfiguration = new YarnConfiguration();
         yarnConfiguration
@@ -253,7 +253,7 @@ public abstract class YarnGateway extends AbstractGateway {
         }
         return result;
     }
-
+    //todo 从SavePoint启动job，通过clusterClient来操作！！！！！！
     private void runSavePointJob(List<JobInfo> jobInfos, ClusterClient<ApplicationId> clusterClient,
             String savePoint) throws Exception {
         for (JobInfo jobInfo : jobInfos) {
@@ -313,7 +313,7 @@ public abstract class YarnGateway extends AbstractGateway {
             return TestResult.fail("测试 Yarn 配置失败：" + e.getMessage());
         }
     }
-
+    //todo 获取集群id/ApplicationId
     private ApplicationId getApplicationId() {
         YarnClusterClientFactory clusterClientFactory = new YarnClusterClientFactory();
         configuration.set(YarnConfigOptions.APPLICATION_ID, config.getClusterConfig().getAppId());

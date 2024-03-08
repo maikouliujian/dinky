@@ -255,6 +255,7 @@ public class TaskServiceImpl extends SuperServiceImpl<TaskMapper, Task> implemen
             process.finish("Submit Flink SQL finished.");
             return jobResult;
         } else {
+            //todo 提交flink jar任务
             JobResult jobResult = jobManager.executeJar();
             process.finish("Submit Flink Jar finished.");
             return jobResult;
@@ -848,6 +849,7 @@ public class TaskServiceImpl extends SuperServiceImpl<TaskMapper, Task> implemen
         if (Asserts.isNull(jobInstance)) {
             return true;
         }
+        //todo 通过ClusterId找到对应的Cluster
         Cluster cluster = clusterService.getById(jobInstance.getClusterId());
         Asserts.checkNotNull(cluster, MsgConstant.FLINK_CLUSTER_NOT_FOUND);
         String jobId = jobInstance.getJid();
