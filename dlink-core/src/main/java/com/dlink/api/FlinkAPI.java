@@ -44,6 +44,7 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
 
 /**
+ * //todo flink rest api核心类
  * FlinkAPI
  *
  * @author wenmo
@@ -75,7 +76,7 @@ public class FlinkAPI {
         }
         return result;
     }
-
+    //todo 发送get请求
     private JsonNode get(String route) {
         try {
             String res = HttpUtil.get(NetConstant.HTTP + address + NetConstant.SLASH + route,

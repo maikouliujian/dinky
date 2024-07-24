@@ -87,6 +87,7 @@ public class ClusterServiceImpl extends SuperServiceImpl<ClusterMapper, Cluster>
     @Override
     public String buildEnvironmentAddress(boolean useRemote, Integer id) {
         if (useRemote && id != 0) {
+            //todo
             return buildRemoteEnvironmentAddress(id);
         } else {
             return buildLocalEnvironmentAddress();
@@ -125,10 +126,11 @@ public class ClusterServiceImpl extends SuperServiceImpl<ClusterMapper, Cluster>
     public List<Cluster> listAutoEnable() {
         return list(new QueryWrapper<Cluster>().eq("enabled", 1).eq("auto_registers", 1));
     }
-
+    //todo 注册集群
     @Override
     public Cluster registersCluster(Cluster cluster) {
         if (cluster.getType().equals(GatewayType.YARN_SESSION.getLongValue())){
+            //todo session模式要进行心跳检测
             if (StrUtil.isBlank(cluster.getResourceManagerAddr())
                 || StrUtil.isBlank(cluster.getApplicationId())){
                 checkHealth(cluster);

@@ -64,11 +64,13 @@ public class LineageContext {
     public LineageContext(TableEnvironmentImpl tableEnv) {
         this.tableEnv = tableEnv;
     }
-
+    //todo 解析flinksql血缘：statement是flinksql语句
     public List<LineageRel> analyzeLineage(String statement) {
         // 1. Generate original relNode tree
         Tuple2<String, RelNode> parsed = parseStatement(statement);
+        //todo sink table
         String sinkTable = parsed.getField(0);
+        //todo RelNode
         RelNode oriRelNode = parsed.getField(1);
 
         // 2. Build lineage based from RelMetadataQuery
@@ -113,6 +115,7 @@ public class LineageContext {
 
     private List<LineageRel> buildFiledLineageResult(String sinkTable, RelNode optRelNode) {
         // target columns
+        //todo 获取sink表的字段
         List<String> targetColumnList = tableEnv.from(sinkTable)
                 .getResolvedSchema()
                 .getColumnNames();
@@ -124,12 +127,14 @@ public class LineageContext {
         List<LineageRel> resultList = new ArrayList<>();
 
         for (int index = 0; index < targetColumnList.size(); index++) {
+            //todo 列名
             String targetColumn = targetColumnList.get(index);
-
+            //todo 查询一个列的来源列
             Set<RelColumnOrigin> relColumnOriginSet = metadataQuery.getColumnOrigins(optRelNode, index);
 
             if (CollectionUtils.isNotEmpty(relColumnOriginSet)) {
                 for (RelColumnOrigin relColumnOrigin : relColumnOriginSet) {
+                    //todo 获取source表
                     // table
                     RelOptTable table = relColumnOrigin.getOriginTable();
                     String sourceTable = String.join(".", table.getQualifiedName());
@@ -138,10 +143,12 @@ public class LineageContext {
                     int ordinal = relColumnOrigin.getOriginColumnOrdinal();
                     List<String> fieldNames = ((TableSourceTable) table).catalogTable().getResolvedSchema()
                             .getColumnNames();
+                    //todo 获取source列名
                     String sourceColumn = fieldNames.get(ordinal);
 
                     // add record
                     resultList.add(LineageRel.build(sourceTable, sourceColumn, sinkTable, targetColumn,
+                            //todo source column 转化成sink column的逻辑
                             relColumnOrigin.getTransform()));
                 }
             }
@@ -166,6 +173,7 @@ public class LineageContext {
         SqlNode validated = parser.validate(sqlNode);
 
         // look for all functions
+        //todo 函数
         FunctionVisitor visitor = new FunctionVisitor();
         validated.accept(visitor);
         List<UnresolvedIdentifier> fullFunctionList = visitor.getFunctionList();

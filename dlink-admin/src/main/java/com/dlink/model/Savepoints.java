@@ -41,6 +41,7 @@ import lombok.EqualsAndHashCode;
  * @author wenmo
  * @since 2021/11/21 16:10
  */
+//todo 管理savepoints
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("dlink_savepoints")

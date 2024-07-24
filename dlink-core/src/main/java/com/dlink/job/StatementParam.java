@@ -28,6 +28,7 @@ import com.dlink.parser.SqlType;
  * @since 2021/11/16
  */
 public class StatementParam {
+    //todo sql
     private String value;
     private SqlType type;
 

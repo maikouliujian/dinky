@@ -231,6 +231,7 @@ public class TaskServiceImpl extends SuperServiceImpl<TaskMapper, Task> implemen
         Task task = this.getTaskInfoById(id);
         Asserts.checkNull(task, Tips.TASK_NOT_EXIST);
         if (Dialect.notFlinkSql(task.getDialect())) {
+            //todo 非flinksql
             return executeCommonSql(SqlDTO.build(task.getStatement(),
                     task.getDatabaseId(), null));
         }
@@ -247,10 +248,11 @@ public class TaskServiceImpl extends SuperServiceImpl<TaskMapper, Task> implemen
         if (GatewayType.KUBERNETES_APPLICATION.equalsValue(config.getType())) {
             loadDocker(id, config.getClusterConfigurationId(), config.getGatewayConfig());
         }
-
+        //todo 初始化jobmanager
         JobManager jobManager = JobManager.build(config);
         process.start();
         if (!config.isJarTask()) {
+            //todo 提交sql
             JobResult jobResult = jobManager.executeSql(task.getStatement());
             process.finish("Submit Flink SQL finished.");
             return jobResult;
@@ -923,6 +925,7 @@ public class TaskServiceImpl extends SuperServiceImpl<TaskMapper, Task> implemen
         JobConfig config = task.buildSubmitConfig();
         config.setJarTask(isJarTask);
         if (!JobManager.useGateway(config.getType())) {
+            //todo sesssion模式，通过id寻找jobmanager地址
             config.setAddress(clusterService.buildEnvironmentAddress(config.isUseRemote(), task.getClusterId()));
         }
         // support custom K8s app submit, rather than clusterConfiguration

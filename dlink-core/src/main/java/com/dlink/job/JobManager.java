@@ -212,7 +212,7 @@ public class JobManager {
             config.setUseRemote(false);
         }
     }
-
+    //todo perjob和applicaition模式使用api，session模式使用rest api
     public static boolean useGateway(String type) {
         return (GatewayType.YARN_PER_JOB.equalsValue(type) || GatewayType.YARN_APPLICATION.equalsValue(type)
                 || GatewayType.KUBERNETES_APPLICATION.equalsValue(type));
@@ -225,6 +225,7 @@ public class JobManager {
             executor = Executor.buildRemoteExecutor(environmentSetting, config.getExecutorSetting());
         } else {
             if (ArrayUtil.isNotEmpty(config.getJarFiles())) {
+
                 config.getExecutorSetting().getConfig().put(PipelineOptions.JARS.key(),
                         Stream.of(config.getJarFiles()).map(FileUtil::getAbsolutePath)
                                 .collect(Collectors.joining(",")));
@@ -411,7 +412,7 @@ public class JobManager {
                                 JarPathContextHolder.getUdfFile(),
                                 JarPathContextHolder.getOtherPluginsFiles()));
     }
-
+    //todo 执行sql
     public JobResult executeSql(String statement) {
         initClassLoader(config);
         ProcessEntity process = ProcessContextHolder.getProcess();
@@ -441,6 +442,7 @@ public class JobManager {
 
                     // Use statement set need to merge all insert sql into a sql.
                     currentSql = String.join(sqlSeparator, inserts);
+                    //todo
                     GatewayResult gatewayResult = submitByGateway(inserts);
                     // Use statement set only has one jid.
                     job.setResult(InsertResult.success(gatewayResult.getAppId()));
@@ -490,6 +492,7 @@ public class JobManager {
                         break;
                     }
                     currentSql = String.join(sqlSeparator, inserts);
+                    //todo 通过gateway提交
                     GatewayResult gatewayResult = submitByGateway(inserts);
                     job.setResult(InsertResult.success(gatewayResult.getAppId()));
                     job.setJobId(gatewayResult.getAppId());
@@ -639,13 +642,16 @@ public class JobManager {
             config.getGatewayConfig().getFlinkConfig().getConfiguration()
                     .put(CoreOptions.CLASSLOADER_RESOLVE_ORDER.key(), "parent-first");
             // Application mode need to submit dlink-app.jar that in the hdfs or image.
+            //todo application提交
             gatewayResult = Gateway.build(config.getGatewayConfig()).submitJar();
         } else {
+            //todo 根据sql获取JobGraph
             JobGraph jobGraph = executor.getJobGraphFromInserts(inserts);
             // Perjob mode need to set savepoint restore path, when recovery from savepoint.
             if (Asserts.isNotNullString(config.getSavePointPath())) {
                 jobGraph.setSavepointRestoreSettings(SavepointRestoreSettings.forPath(config.getSavePointPath(), true));
             }
+            //todo per-job提交
             // Perjob mode need to submit job graph.
             gatewayResult = Gateway.build(config.getGatewayConfig()).submitJobGraph(jobGraph);
         }
@@ -732,10 +738,12 @@ public class JobManager {
         if (useGateway && !useRestAPI) {
             config.getGatewayConfig().setFlinkConfig(FlinkConfig.build(jobId, ActionType.CANCEL.getValue(),
                     null, null));
+            //todo savepointJob时出发取消作业
             Gateway.build(config.getGatewayConfig()).savepointJob();
             return true;
         } else {
             try {
+                //todo 使用rest api取消作业
                 return FlinkAPI.build(config.getAddress()).stop(jobId);
             } catch (Exception e) {
                 logger.error("停止作业时集群不存在: " + e);
@@ -769,7 +777,7 @@ public class JobManager {
         JobContextHolder.setJob(job);
         ready();
         try {
-            //todo
+            //todo 提交jar任务
             GatewayResult gatewayResult = Gateway.build(config.getGatewayConfig()).submitJar();
             job.setResult(InsertResult.success(gatewayResult.getAppId()));
             job.setJobId(gatewayResult.getAppId());
