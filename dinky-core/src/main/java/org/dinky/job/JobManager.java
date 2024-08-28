@@ -256,11 +256,13 @@ public class JobManager {
                 .map(t -> executor.pretreatStatement(t))
                 .collect(Collectors.toList());
         statement = String.join(";\n", statements);
+        //todo 解析flink jar sql
         jobParam =
                 Explainer.build(executor, useStatementSet, this).pretreatStatements(SqlUtil.getStatements(statement));
         job = Job.build(runMode, config, executorConfig, executor, statement, useGateway);
         ready();
         try {
+            //todo 提交！！！！！！
             JobJarStreamGraphBuilder.build(this).run();
             if (job.isFailed()) {
                 failed();

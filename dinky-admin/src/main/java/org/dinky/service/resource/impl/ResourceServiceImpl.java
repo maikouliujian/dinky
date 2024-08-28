@@ -215,7 +215,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourcesMapper, Resources>
         treeNodeDTO.setDesc(resources.getDescription());
         return treeNodeDTO;
     }
-
+    //todo 获取资源文件
     @Override
     public String getContentByResourceId(Integer id) {
         Resources resources = getById(id);

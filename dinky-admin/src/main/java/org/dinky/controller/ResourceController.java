@@ -111,7 +111,7 @@ public class ResourceController {
         List<Resources> resources = resourcesService.getResourcesTree();
         return Result.succeed(resources);
     }
-
+    //todo 根据资源id获取资源文件
     @GetMapping("/getContentByResourceId")
     @ApiOperation("Query Resource Content")
     @ApiImplicitParam(name = "id", value = "Resource ID", required = true, dataType = "Integer", paramType = "query")

@@ -60,6 +60,7 @@ public abstract class BaseTask {
         Set<Class<?>> classes =
                 ClassUtil.scanPackageBySuper(BaseTask.class.getPackage().getName(), BaseTask.class);
         for (Class<?> clazz : classes) {
+            //todo SupportDialect
             SupportDialect annotation = clazz.getAnnotation(SupportDialect.class);
             if (annotation != null) {
                 for (Dialect dialect : annotation.value()) {
