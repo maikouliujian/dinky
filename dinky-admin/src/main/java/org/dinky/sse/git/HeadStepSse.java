@@ -63,7 +63,7 @@ public class HeadStepSse extends StepSse {
                 checkPython();
         }
     }
-
+    // todo 检查java maven环境
     private void checkJava() {
         String mavenHome = MavenUtil.getMavenHome();
 

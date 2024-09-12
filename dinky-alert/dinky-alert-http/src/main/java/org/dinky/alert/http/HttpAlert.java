@@ -26,6 +26,7 @@ import org.dinky.alert.AlertResult;
  * Http Alert
  *
  */
+// todo http报警
 public class HttpAlert extends AbstractAlert {
 
     @Override

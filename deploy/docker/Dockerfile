@@ -31,7 +31,8 @@ RUN mkdir release &&  \
     mv release/dinky-release-* release/dinky
 
 
-FROM eclipse-temurin:8-jre-jammy
+# FROM eclipse-temurin:8-jre-jammy
+FROM maven:3.9-eclipse-temurin-8-alpine
 
 ARG FLINK_VERSION
 ENV FLINK_VERSION=${FLINK_VERSION}

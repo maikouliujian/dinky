@@ -109,7 +109,7 @@ public abstract class YarnGateway extends AbstractGateway {
     public YarnGateway(GatewayConfig config) {
         super(config);
     }
-
+    // todo 初始化
     public void init() {
         initConfig();
         initYarnClient();
@@ -131,7 +131,7 @@ public abstract class YarnGateway extends AbstractGateway {
         }
 
         configuration.set(DeploymentOptions.TARGET, getType().getLongValue());
-
+        // todo flink lib可预先上传到hdfs上
         configuration.set(
                 YarnConfigOptions.PROVIDED_LIB_DIRS, Collections.singletonList(clusterConfig.getFlinkLibPath()));
         if (Asserts.isNotNullString(flinkConfig.getJobName())) {
@@ -159,7 +159,7 @@ public abstract class YarnGateway extends AbstractGateway {
             configuration.set(YarnConfigOptions.APPLICATION_TYPE, "Dinky Flink");
             resetCheckpointInApplicationMode(flinkConfig.getJobName());
         }
-
+        // todo 设置日志文件
         YarnLogConfigUtil.setLogConfigFileInConfig(configuration, clusterConfig.getFlinkConfigPath());
     }
 

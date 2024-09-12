@@ -105,13 +105,14 @@ public class ResourceController {
      * query Resources tree data
      * @return {@link Result}< {@link List}< {@link Resources}>>}
      */
+    // todo 获取资源文件list
     @GetMapping("/getResourcesTreeData")
     @ApiOperation("Get Resources Tree Data")
     public Result<List<Resources>> getResourcesTree() {
         List<Resources> resources = resourcesService.getResourcesTree();
         return Result.succeed(resources);
     }
-    //todo 根据资源id获取资源文件
+    // todo 根据资源id获取资源文件
     @GetMapping("/getContentByResourceId")
     @ApiOperation("Query Resource Content")
     @ApiImplicitParam(name = "id", value = "Resource ID", required = true, dataType = "Integer", paramType = "query")

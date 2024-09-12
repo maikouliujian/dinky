@@ -29,7 +29,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-//todo 提交flink jar入口！！！！！！
+// todo 提交flink jar入口！！！！！！
 @SupportDialect(Dialect.FLINK_JAR)
 public class FlinkJarSqlTask extends FlinkSqlTask {
     public FlinkJarSqlTask(TaskDTO task) {
@@ -40,7 +40,7 @@ public class FlinkJarSqlTask extends FlinkSqlTask {
     public List<SqlExplainResult> explain() {
         return jobManager.explainSql(task.getStatement()).getSqlExplainResults();
     }
-    //todo 提交
+    // todo 提交
     @Override
     public JobResult execute() throws Exception {
 

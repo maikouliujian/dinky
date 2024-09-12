@@ -130,7 +130,7 @@ public class Explainer {
             if (statement.isEmpty()) {
                 continue;
             }
-            //todo 寻找对应的SqlType，比如EXECUTE
+            // todo 寻找对应的SqlType，比如EXECUTE
             SqlType operationType = Operations.getOperationType(statement);
             if (operationType.equals(SqlType.SET) && SetSqlParseStrategy.INSTANCE.match(statement)) {
                 CustomSetOperation customSetOperation = new CustomSetOperation(statement);
@@ -165,7 +165,7 @@ public class Explainer {
                     break;
                 }
             } else if (operationType.equals(SqlType.EXECUTE)) {
-                //todo EXECUTE
+                // todo EXECUTE
                 execute.add(new StatementParam(statement, operationType));
             } else if (operationType.equals(SqlType.PRINT)) {
                 Map<String, String> config = this.executor.getExecutorConfig().getConfig();

@@ -75,7 +75,7 @@ public class ExecuteJarOperation extends AbstractOperation implements ExtendOper
     }
 
     public Pipeline getStreamGraph(CustomTableEnvironment tEnv, List<URL> classpaths) {
-        //todo 解析执行jar sql的参数
+        // todo 解析执行jar sql的参数
         JarSubmitParam submitParam = JarSubmitParam.build(statement);
         return getStreamGraph(submitParam, tEnv, classpaths);
     }
@@ -105,7 +105,7 @@ public class ExecuteJarOperation extends AbstractOperation implements ExtendOper
                     .setEntryPointClassName(submitParam.getMainClass())
                     .setConfiguration(configuration)
                     .setSavepointRestoreSettings(savepointRestoreSettings)
-                    //todo 设置args
+                    // todo 设置args
                     .setArguments(extractArgs(submitArgs.trim()).toArray(new String[0]))
                     .setUserClassPaths(classpaths)
                     .build();
@@ -169,7 +169,7 @@ public class ExecuteJarOperation extends AbstractOperation implements ExtendOper
     public Pipeline explain(CustomTableEnvironment tEnv, List<URL> classpaths) {
         return getStreamGraph(tEnv, classpaths);
     }
-    //todo 对应flink jar提交sql
+    // todo 对应flink jar提交sql
 
     /***
      *
@@ -194,7 +194,7 @@ public class ExecuteJarOperation extends AbstractOperation implements ExtendOper
         private Boolean allowNonRestoredState = SavepointConfigOptions.SAVEPOINT_IGNORE_UNCLAIMED_STATE.defaultValue();
 
         public static JarSubmitParam build(String statement) {
-            //todo 通过exec jar sql获取参数信息
+            // todo 通过exec jar sql获取参数信息
             JarSubmitParam submitParam = ExecuteJarParseStrategy.getInfo(statement);
             Assert.notBlank(submitParam.getUri());
             return submitParam;

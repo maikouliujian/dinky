@@ -43,6 +43,7 @@ import cn.hutool.core.util.StrUtil;
  * @author ZackYoung
  * @since 0.8.0
  */
+// todo maven编译
 public class MavenStepSse extends StepSse {
 
     public MavenStepSse(
@@ -71,7 +72,7 @@ public class MavenStepSse extends StepSse {
         }
 
         Assert.isTrue(pom.exists(), "pom not exists!");
-
+        // todo 编译
         boolean state = MavenUtil.build(
                 MavenUtil.getMavenSettingsPath(),
                 pom.getAbsolutePath(),

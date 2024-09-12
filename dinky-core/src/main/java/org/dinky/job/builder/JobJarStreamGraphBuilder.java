@@ -78,7 +78,7 @@ public class JobJarStreamGraphBuilder extends JobBuilder {
     }
 
     private Pipeline getPipeline() {
-        //todo 获取StreamGraph
+        // todo 获取StreamGraph
         Pipeline pipeline = getJarStreamGraph(job.getStatement(), jobManager.getDinkyClassLoader());
         if (pipeline instanceof StreamGraph) {
             if (Asserts.isNotNullString(config.getSavePointPath())) {
@@ -98,10 +98,10 @@ public class JobJarStreamGraphBuilder extends JobBuilder {
         } else {
             GatewayResult gatewayResult;
             if (runMode.isApplicationMode()) {
-                //todo application模式提交
+                // todo application模式提交
                 gatewayResult = submitGateway();
             } else {
-                //todo 非application模式提交
+                // todo 非application模式提交
                 gatewayResult = submitNormalWithGateway();
             }
             job.setResult(InsertResult.success(gatewayResult.getId()));
@@ -126,14 +126,14 @@ public class JobJarStreamGraphBuilder extends JobBuilder {
     }
 
     private GatewayResult submitNormalWithGateway() {
-        //todo 获取StreamGraph
+        // todo 获取StreamGraph
         Pipeline pipeline = getPipeline();
         if (pipeline instanceof StreamGraph) {
             ((StreamGraph) pipeline).setJobName(config.getJobName());
         } else if (pipeline instanceof Plan) {
             ((Plan) pipeline).setJobName(config.getJobName());
         }
-        //todo 获取jobGraph
+        // todo 获取jobGraph
         JobGraph jobGraph = FlinkStreamEnvironmentUtil.getJobGraph(pipeline, configuration);
         GatewayConfig gatewayConfig = config.getGatewayConfig();
         List<String> uriList = getUris(job.getStatement());
@@ -167,7 +167,7 @@ public class JobJarStreamGraphBuilder extends JobBuilder {
         ExecuteJarOperation executeJarOperation = null;
         for (String sql : statements) {
             String sqlStatement = executor.pretreatStatement(sql);
-            //todo 匹配上执行jar sql
+            // todo 匹配上执行jar sql
             if (ExecuteJarParseStrategy.INSTANCE.match(sqlStatement)) {
                 executeJarOperation = new ExecuteJarOperation(sqlStatement);
                 break;
@@ -188,7 +188,7 @@ public class JobJarStreamGraphBuilder extends JobBuilder {
         }
         Assert.notNull(executeJarOperation, () -> new DinkyException("Not found execute jar operation."));
         List<URL> urLs = jobManager.getAllFileSet();
-        //todo 解析执行sql
+        // todo 解析执行sql
         return executeJarOperation.explain(executor.getCustomTableEnvironment(), urLs);
     }
 

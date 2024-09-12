@@ -61,7 +61,7 @@ public final class GitProjectStepSseFactory {
     public static void build(GitProject gitProject, Dict params) {
         int sleep = 500;
         List<SseEmitter> emitterList = new ArrayList<>();
-
+        // todo maven构建步骤【构建StepSse链表】
         StepSse headStepSse = getHeadStepPlan(gitProject.getCodeType(), sleep, emitterList, params);
         cachedThreadPool.execute(headStepSse::main);
         gitProject.setBuildStep(1);

@@ -95,6 +95,7 @@ public class MavenUtil {
         } else {
             localRepositoryDirectory = repositoryDir;
         }
+        // todo maven编译命令行
         String mavenCommandLine =
                 getMavenCommandLineByMvn(pom, mavenHome, localRepositoryDirectory, setting, goals, args);
         Opt.ofNullable(consumer).ifPresent(c -> c.accept("Executing command: " + mavenCommandLine + "\n"));
@@ -179,8 +180,9 @@ public class MavenUtil {
     public static String getMavenVersion() {
         return RuntimeUtil.execForStr(getMavenHome() + "/bin/" + EXECTOR + " -v");
     }
-
+    // todo check maven home
     public static String getMavenHome() {
+        // todo 获取maven home
         String mavenHome = SystemUtil.get("MAVEN_HOME");
         if (StrUtil.isNotBlank(mavenHome)) {
             String searchCmd = SystemUtil.getOsInfo().isWindows() ? "where" : "which";

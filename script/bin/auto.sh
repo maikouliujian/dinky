@@ -69,6 +69,8 @@ JAR_PARAMS_OPT="--logging.config=${LOG_CONFIG}"
 JMX="-javaagent:$APP_HOME/lib/jmx_prometheus_javaagent-0.20.0.jar=10087:$APP_HOME/config/jmx/jmx_exporter_config.yaml"
 #JVM OPTS
 JVM_OPTS="-Xms512M -Xmx2048M -XX:PermSize=512M -XX:MaxPermSize=1024M"
+#MAVEN_OPT
+MAVEN_OPT="-DMAVEN_HOME=/opt/apache-maven-3.9.9"
 
 # Check whether the pid path exists
 PID_PATH="${APP_HOME}/run"
@@ -102,6 +104,7 @@ start() {
   assertIsInputVersion
   updatePid
   if [ -z "$pid" ]; then
+    ###、todo 后台启动
     nohup java ${PARAMS_OPT} ${JVM_OPTS} ${OOM_OPT} ${GC_OPT} ${PARAMS_OPT} -Xverify:none -cp "${CLASS_PATH}" org.dinky.Dinky ${JAR_PARAMS_OPT}  > ${DINKY_LOG_PATH}/dinky-start.log 2>&1 &
     echo $! >"${PID_PATH}"/${PID_FILE}
     echo "........................................Start Dinky Done........................................"
@@ -115,7 +118,8 @@ startOnPending() {
   assertIsInputVersion
   updatePid
   if [ -z "$pid" ]; then
-    java ${PARAMS_OPT} ${JVM_OPTS} ${OOM_OPT} ${GC_OPT} ${PARAMS_OPT} -Xverify:none -cp "${CLASS_PATH}" org.dinky.Dinky  ${JAR_PARAMS_OPT}
+    ###、todo 阻塞启动
+    java ${PARAMS_OPT} ${JVM_OPTS} ${OOM_OPT} ${GC_OPT} ${PARAMS_OPT} ${MAVEN_OPT} -Xverify:none -cp "${CLASS_PATH}" org.dinky.Dinky  ${JAR_PARAMS_OPT}
     echo "........................................Start Dinky Successfully........................................"
   else
     echo "Dinky pid $pid is in ${PID_PATH}/${PID_FILE}, Please stop first !!!"

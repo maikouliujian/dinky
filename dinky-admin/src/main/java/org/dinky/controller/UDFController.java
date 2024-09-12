@@ -85,6 +85,7 @@ public class UDFController {
      *
      * @return Result
      */
+    // todo 获取udf资源
     @GetMapping("/udfResourcesList")
     public Result<List<Resources>> udfResourcesList() {
         return Result.succeed(udfService.udfResourcesList());

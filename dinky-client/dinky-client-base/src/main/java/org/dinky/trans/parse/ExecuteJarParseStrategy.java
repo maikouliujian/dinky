@@ -43,7 +43,7 @@ public class ExecuteJarParseStrategy extends AbstractRegexParseStrategy {
     public ExecuteJarParseStrategy() {
         super(PATTERN);
     }
-    //todo 解析执行jar sql
+    // todo 解析执行jar sql
     public static ExecuteJarOperation.JarSubmitParam getInfo(String statement) {
         statement = statement.replace("\r\n", " ").replace("\n", " ") + " ENDOFSQL";
         SqlSegment sqlSegment = new SqlSegment("with", "(with\\s+\\()(.+)(\\))", "',");

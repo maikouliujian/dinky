@@ -70,7 +70,7 @@ public class YarnApplicationGateway extends YarnGateway {
             return url;
         }
     }
-
+    // todo application模式提交
     @Override
     public GatewayResult submitJar(FlinkUdfPathContextHolder udfPathContextHolder) {
         if (Asserts.isNull(yarnClient)) {

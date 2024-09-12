@@ -57,6 +57,7 @@ import cn.hutool.core.util.StrUtil;
 @Service
 public class ResourceServiceImpl extends ServiceImpl<ResourcesMapper, Resources> implements ResourcesService {
     private static final TimedCache<Integer, Resources> RESOURCES_CACHE = new TimedCache<>(30 * 1000);
+    // todo 限制10m
     private static final long ALLOW_MAX_CAT_CONTENT_SIZE = 10 * 1024 * 1024;
 
     @Override
@@ -215,11 +216,12 @@ public class ResourceServiceImpl extends ServiceImpl<ResourcesMapper, Resources>
         treeNodeDTO.setDesc(resources.getDescription());
         return treeNodeDTO;
     }
-    //todo 获取资源文件
+    // todo 获取资源文件
     @Override
     public String getContentByResourceId(Integer id) {
         Resources resources = getById(id);
         DinkyAssert.checkNull(resources, Status.RESOURCE_DIR_OR_FILE_NOT_EXIST);
+        // todo 资源文件大于10m报错
         Assert.isFalse(resources.getSize() > ALLOW_MAX_CAT_CONTENT_SIZE, () -> new BusException("file is too large!"));
         return getBaseResourceManager().getFileContent(resources.getFullName());
     }

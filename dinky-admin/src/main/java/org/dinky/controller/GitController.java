@@ -261,7 +261,7 @@ public class GitController {
     public Result<GitProject> getOneDetails(@RequestParam("id") Integer id) {
         return Result.succeed(gitProjectService.getById(id));
     }
-
+    // todo maven build入口
     /**
      * build project
      *
@@ -289,6 +289,7 @@ public class GitController {
         Dict params = new Dict();
         File logDir = FileUtil.file(GitRepository.getProjectDir(gitProject.getName()), gitProject.getBranch() + "_log");
         params.set("gitProject", gitProject).set("logDir", logDir);
+        // todo 构建
         GitProjectStepSseFactory.build(gitProject, params);
 
         return Result.succeed(Status.GIT_BUILD_SUCCESS);

@@ -65,7 +65,7 @@ public class AlertInstanceServiceImpl extends SuperServiceImpl<AlertInstanceMapp
     public List<AlertInstance> listEnabledAll() {
         return list(new LambdaQueryWrapper<AlertInstance>().eq(AlertInstance::getEnabled, 1));
     }
-
+    // todo 报警测试
     @Override
     public AlertResult testAlert(AlertInstanceDTO alertInstanceDTO) {
         AlertConfig alertConfig =

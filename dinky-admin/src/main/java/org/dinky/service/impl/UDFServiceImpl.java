@@ -98,7 +98,7 @@ public class UDFServiceImpl extends ServiceImpl<UDFManageMapper, UDFManage> impl
             return x.getIsDirectory() || "jar".equals(suffix) || "zip".equals(suffix) || "py".equals(suffix);
         });
     }
-
+    // todo udf添加资源文件
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void addOrUpdateByResourceId(List<Integer> resourceIds) {
@@ -121,6 +121,7 @@ public class UDFServiceImpl extends ServiceImpl<UDFManageMapper, UDFManage> impl
                     .flatMap(x -> {
                         String suffix = FileUtil.getSuffix(x.getFileName());
                         if ("jar".equals(suffix)) {
+                            // todo 获取udf资源文件，限制10m以内
                             File file = resourcesService.getFile(x.getId());
                             List<Class<?>> classes = UDFUtils.getUdfClassByJar(file);
                             return classes.stream().map(clazz -> {

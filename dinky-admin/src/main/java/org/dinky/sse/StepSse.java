@@ -64,6 +64,7 @@ public abstract class StepSse {
     protected final AtomicInteger stepAtomic;
     protected final ExecutorService cachedThreadPool;
     protected final LinkedList<String> msgList = new LinkedList<>();
+    // todo 构建链表！！！！！！
     protected StepSse nexStepSse = null;
 
     /** 0-fail , 1-process , 2-success */
