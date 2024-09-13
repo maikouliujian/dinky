@@ -46,6 +46,7 @@ import lombok.Getter;
  *
  * @since 2021/11/18
  */
+//todo 系统配置类
 @Getter
 public class SystemConfiguration {
 
