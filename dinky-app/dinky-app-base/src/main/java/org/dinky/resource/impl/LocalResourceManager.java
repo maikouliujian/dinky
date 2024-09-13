@@ -129,6 +129,7 @@ public class LocalResourceManager implements BaseResourceManager {
 
     @Override
     public InputStream readFile(String path) {
+        //todo System.getProperty("dinkyAddr")
         try (HttpResponse exec = HttpUtil.createGet(
                         systemConfiguration.getDinkyAddr().getValue() + "/download/downloadFromRs?path="
                                 + URLUtil.encode(path))
