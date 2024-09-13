@@ -25,7 +25,7 @@ import org.dinky.resource.BaseResourceManager;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-
+//todo 资源中心下载文件
 public class RsURLConnection extends URLConnection {
     private InputStream inputStream;
 
@@ -37,7 +37,7 @@ public class RsURLConnection extends URLConnection {
         }
         inputStream = instance.readFile(getURL().getPath());
     }
-
+    //todo 获取文件流
     @Override
     public InputStream getInputStream() {
         connect();
