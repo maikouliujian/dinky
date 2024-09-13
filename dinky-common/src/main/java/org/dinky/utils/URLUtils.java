@@ -52,6 +52,7 @@ public class URLUtils {
     public static File toFile(String urlPath) {
         try {
             URL url = new URL(urlPath);
+            //todo RsURLConnection
             URLConnection urlConnection = url.openConnection();
             if ("rs".equals(url.getProtocol())) {
                 String path = StrUtil.join(File.separator, TMP_PATH, "rs", url.getPath());
