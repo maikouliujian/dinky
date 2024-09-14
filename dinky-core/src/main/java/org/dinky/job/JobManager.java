@@ -210,7 +210,7 @@ public class JobManager {
     public void init() {
         if (!isPlanMode) {
             runMode = GatewayType.get(config.getType());
-            //todo application和per-job使用gateway模式
+            // todo application和per-job使用gateway模式
             useGateway = GatewayType.isDeployCluster(config.getType());
             handler = JobHandler.build();
         }

@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @AutoService(FileSystemFactory.class)
 @Slf4j
 public class ResourceFileSystemFactory implements FileSystemFactory {
-    //todo 代理的schema：rs:/
+    // todo 代理的schema：rs:/
     @Override
     public String getScheme() {
         return ResourceFileSystem.URI_SCHEMA.getScheme();
@@ -47,7 +47,7 @@ public class ResourceFileSystemFactory implements FileSystemFactory {
             log.warn("rs protocol startup failed, not initialized");
             return null;
         }
-        //todo 获取代理ResourceFileSystem
+        // todo 获取代理ResourceFileSystem
         return ResourceFileSystem.getSharedInstance();
     }
 }

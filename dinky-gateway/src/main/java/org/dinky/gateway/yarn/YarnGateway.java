@@ -119,7 +119,7 @@ public abstract class YarnGateway extends AbstractGateway {
         final ClusterConfig clusterConfig = config.getClusterConfig();
         configuration = GlobalConfiguration.loadConfiguration(
                 clusterConfig.getFlinkConfigPath().trim());
-        //todo 设置classloader.resolve-order：parent-first
+        // todo 设置classloader.resolve-order：parent-first
         configuration.set(CoreOptions.CLASSLOADER_RESOLVE_ORDER, "parent-first");
 
         final FlinkConfig flinkConfig = config.getFlinkConfig();
@@ -140,7 +140,7 @@ public abstract class YarnGateway extends AbstractGateway {
         }
 
         if (Asserts.isNotNullString(clusterConfig.getHadoopConfigPath())) {
-            //todo fs.hdfs.hadoopconf
+            // todo fs.hdfs.hadoopconf
             configuration.setString(
                     ConfigConstants.PATH_HADOOP_CONFIG,
                     FileUtil.file(clusterConfig.getHadoopConfigPath()).getAbsolutePath());

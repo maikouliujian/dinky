@@ -68,6 +68,7 @@
                 <version>2.6</version>
                 <configuration>
                     <descriptorRefs>
+                        <!-- todo 输出jar-with-dependencies-->
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                     <archive>

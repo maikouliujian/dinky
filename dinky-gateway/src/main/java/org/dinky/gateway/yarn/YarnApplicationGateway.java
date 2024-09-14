@@ -50,7 +50,7 @@ import cn.hutool.core.util.URLUtil;
  *
  * @since 2021/10/29
  */
-//todo application模式
+// todo application模式
 public class YarnApplicationGateway extends YarnGateway {
 
     @Override
@@ -75,23 +75,23 @@ public class YarnApplicationGateway extends YarnGateway {
     @Override
     public GatewayResult submitJar(FlinkUdfPathContextHolder udfPathContextHolder) {
         if (Asserts.isNull(yarnClient)) {
-            //todo 初始化
+            // todo 初始化
             init();
         }
 
         AppConfig appConfig = config.getAppConfig();
-        //todo 上传用户程序的jar包
+        // todo 上传用户程序的jar包
         configuration.set(PipelineOptions.JARS, Collections.singletonList(formatUrl(appConfig.getUserJarPath())));
         configuration.setString(
                 "python.files",
                 udfPathContextHolder.getPyUdfFile().stream().map(File::getName).collect(Collectors.joining(",")));
-        //todo 上传用户程序的配置文件
+        // todo 上传用户程序的配置文件
         String[] userJarParas =
                 Asserts.isNotNull(appConfig.getUserJarParas()) ? appConfig.getUserJarParas() : new String[0];
 
         ClusterSpecification.ClusterSpecificationBuilder clusterSpecificationBuilder =
                 createClusterSpecificationBuilder();
-        //todo 用户程序的main class
+        // todo 用户程序的main class
         ApplicationConfiguration applicationConfiguration =
                 new ApplicationConfiguration(userJarParas, appConfig.getUserJarMainAppClass());
 
@@ -103,11 +103,11 @@ public class YarnApplicationGateway extends YarnGateway {
             clusterDescriptorAdapter.addShipFiles(Arrays.asList(preparSqlFile()));
             addConfigParas(
                     CustomerConfigureOptions.EXEC_SQL_FILE, configuration.get(CustomerConfigureOptions.EXEC_SQL_FILE));
-            //todo application模式执行flink任务
+            // todo application模式执行flink任务
             ClusterClientProvider<ApplicationId> clusterClientProvider = yarnClusterDescriptor.deployApplicationCluster(
                     clusterSpecificationBuilder.createClusterSpecification(), applicationConfiguration);
             ClusterClient<ApplicationId> clusterClient = clusterClientProvider.getClusterClient();
-            //todo 获取weburl！！！！！！
+            // todo 获取weburl！！！！！！
             webUrl = getWebUrl(clusterClient, result);
 
             ApplicationId applicationId = clusterClient.getClusterId();

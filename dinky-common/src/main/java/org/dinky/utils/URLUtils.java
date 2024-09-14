@@ -39,7 +39,7 @@ import cn.hutool.core.util.StrUtil;
  * @since 0.7.0
  */
 public class URLUtils {
-    //todo 下载jar包到本地的目录：/tmp/rs/......
+    // todo 下载jar包到本地的目录：/tmp/rs/......
     private static final String TMP_PATH = StrUtil.join(File.separator, System.getProperty("user.dir"), "tmp");
 
     /**
@@ -48,15 +48,15 @@ public class URLUtils {
      * @param urlPath urlPath
      * @return file
      */
-    //todo 下载jar包到本地
+    // todo 下载jar包到本地
     public static File toFile(String urlPath) {
         try {
             URL url = new URL(urlPath);
-            //todo RsURLConnection
+            // todo RsURLConnection
             URLConnection urlConnection = url.openConnection();
             if ("rs".equals(url.getProtocol())) {
                 String path = StrUtil.join(File.separator, TMP_PATH, "rs", url.getPath());
-                //todo 从远端写到临时目录/tmp/rs/下
+                // todo 从远端写到临时目录/tmp/rs/下
                 return FileUtil.writeFromStream(urlConnection.getInputStream(), path);
             } else if ("file".equals(url.getProtocol())) {
                 return new File(url.getPath());

@@ -50,7 +50,7 @@ public class MainApp {
         AppParamConfig appConfig = JsonUtils.toJavaBean(config, AppParamConfig.class);
         log.info("dinky app is Ready to run, config is {}", appConfig);
         DBUtil.init(appConfig);
-        //todo dinky main class
+        // todo dinky main class
         Submitter.submit(appConfig);
     }
 }

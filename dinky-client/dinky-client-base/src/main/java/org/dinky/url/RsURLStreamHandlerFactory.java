@@ -28,7 +28,7 @@ public class RsURLStreamHandlerFactory implements URLStreamHandlerFactory {
     @Override
     public URLStreamHandler createURLStreamHandler(String protocol) {
         if (ResourceFileSystem.URI_SCHEMA.getScheme().equals(protocol)) {
-            //todo 自定义URLStreamHandler
+            // todo 自定义URLStreamHandler
             return new RsURLStreamHandler();
         }
         try {

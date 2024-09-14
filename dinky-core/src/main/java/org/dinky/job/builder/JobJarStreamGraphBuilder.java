@@ -93,7 +93,7 @@ public class JobJarStreamGraphBuilder extends JobBuilder {
 
     @Override
     public void run() throws Exception {
-        //todo application 和 per-job 使用gateway模式，session模式使用非gateway模式
+        // todo application 和 per-job 使用gateway模式，session模式使用非gateway模式
         if (!useGateway) {
             submitNormal();
         } else {
@@ -143,7 +143,7 @@ public class JobJarStreamGraphBuilder extends JobBuilder {
                 .map(File::getAbsolutePath)
                 .toArray(String[]::new);
         gatewayConfig.setJarPaths(jarPaths);
-        //todo 提交
+        // todo 提交
         return Gateway.build(gatewayConfig).submitJobGraph(jobGraph);
     }
 

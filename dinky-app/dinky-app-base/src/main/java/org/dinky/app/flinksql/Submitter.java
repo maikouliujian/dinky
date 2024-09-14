@@ -105,11 +105,11 @@ public class Submitter {
     }
 
     public static void submit(AppParamConfig config) throws SQLException {
-        //todo 初始化系统配置
+        // todo 初始化系统配置
         initSystemConfiguration();
-        //todo 资源管理
+        // todo 资源管理
         BaseResourceManager.initResourceManager();
-        //todo 设置RsURLStreamHandler
+        // todo 设置RsURLStreamHandler
         URL.setURLStreamHandlerFactory(new RsURLStreamHandlerFactory());
         log.info("{} Start Submit Job:{}", LocalDateTime.now(), config.getTaskId());
 
@@ -140,7 +140,7 @@ public class Submitter {
         Optional<JobClient> jobClient = Optional.empty();
         try {
             if (Dialect.FLINK_JAR == appTask.getDialect()) {
-                //todo 提交flink jar
+                // todo 提交flink jar
                 jobClient = executeJarJob(appTask.getType(), executor, statements);
             } else {
                 jobClient = executeJob(executor, statements);
@@ -148,7 +148,7 @@ public class Submitter {
         } finally {
             log.info("Start Monitor Job");
             if (jobClient.isPresent()) {
-                //todo 监听flink作业状态
+                // todo 监听flink作业状态
                 FlinkAppUtil.monitorFlinkTask(jobClient.get(), config.getTaskId());
             } else {
                 log.error("jobClient is empty, can not  monitor job");
@@ -258,7 +258,7 @@ public class Submitter {
         for (String statement : statements) {
             if (ExecuteJarParseStrategy.INSTANCE.match(statement)) {
                 ExecuteJarOperation executeJarOperation = new ExecuteJarOperation(statement);
-                //todo 获取StreamGraph
+                // todo 获取StreamGraph
                 Pipeline pipeline = executeJarOperation.getStreamGraph(executor.getCustomTableEnvironment());
                 ReadableConfig configuration =
                         executor.getStreamExecutionEnvironment().getConfiguration();
@@ -283,7 +283,7 @@ public class Submitter {
                             .configure(configuration, Thread.currentThread().getContextClassLoader());
                     plan.setJobName(executor.getExecutorConfig().getJobName());
                 }
-                //todo
+                // todo
                 JobClient client =
                         FlinkStreamEnvironmentUtil.executeAsync(pipeline, executor.getStreamExecutionEnvironment());
                 jobClient = Optional.of(client);

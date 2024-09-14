@@ -180,7 +180,7 @@ public class TaskServiceImpl extends SuperServiceImpl<TaskMapper, Task> implemen
                 .encodeToString(JsonUtils.toJsonString(appParamConfig).getBytes());
         return StrFormatter.format("--config {}", encodeParam).split(" ");
     }
-    //todo 第一步
+    // todo 第一步
     @ProcessStep(type = ProcessStepType.SUBMIT_PRECHECK)
     public TaskDTO prepareTask(TaskSubmitDto submitDto) {
         TaskDTO task = this.getTaskInfoById(submitDto.getId());
@@ -199,7 +199,7 @@ public class TaskServiceImpl extends SuperServiceImpl<TaskMapper, Task> implemen
 
     @ProcessStep(type = ProcessStepType.SUBMIT_EXECUTE)
     public JobResult executeJob(TaskDTO task) throws Exception {
-        //todo 获取task类型，提交task
+        // todo 获取task类型，提交task
         JobResult jobResult = BaseTask.getTask(task).execute();
         log.info("execute job finished,status is {}", jobResult.getStatus());
         return jobResult;
@@ -216,14 +216,14 @@ public class TaskServiceImpl extends SuperServiceImpl<TaskMapper, Task> implemen
         log.info("execute job finished,status is {}", jobResult.getStatus());
         return jobResult;
     }
-    //todo SUBMIT_BUILD_CONFIG
+    // todo SUBMIT_BUILD_CONFIG
     @Override
     @ProcessStep(type = ProcessStepType.SUBMIT_BUILD_CONFIG)
     public JobConfig buildJobSubmitConfig(TaskDTO task) {
         if (Asserts.isNull(task.getType())) {
             task.setType(GatewayType.LOCAL.getLongValue());
         }
-        //todo Start initialize FlinkSQLEnv
+        // todo Start initialize FlinkSQLEnv
         task.setStatement(buildEnvSql(task) + task.getStatement());
         JobConfig config = task.getJobConfig();
         Savepoints savepoints = savepointsService.getSavePointWithStrategy(task);
@@ -329,11 +329,11 @@ public class TaskServiceImpl extends SuperServiceImpl<TaskMapper, Task> implemen
     public JobResult submitTask(TaskSubmitDto submitDto) throws Exception {
         // 注解自调用会失效，这里通过获取对象方法绕过此限制
         TaskServiceImpl taskServiceBean = applicationContext.getBean(TaskServiceImpl.class);
-        //todo 第一步：Start check and config task
+        // todo 第一步：Start check and config task
         TaskDTO taskDTO = taskServiceBean.prepareTask(submitDto);
         // The statement set is enabled by default when submitting assignments
         taskDTO.setStatementSet(true);
-        //todo 第一步：提交task
+        // todo 第一步：提交task
         JobResult jobResult = taskServiceBean.executeJob(taskDTO);
         if ((jobResult.getStatus() == Job.JobStatus.FAILED)) {
             throw new RuntimeException(jobResult.getError());

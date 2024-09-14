@@ -70,7 +70,7 @@ public class FlinkSqlTask extends BaseTask {
 
     protected JobManager getJobManager() {
         TaskService taskService = SpringUtil.getBean(TaskServiceImpl.class);
-        //todo SUBMIT_BUILD_CONFIG
+        // todo SUBMIT_BUILD_CONFIG
         return JobManager.build(taskService.buildJobSubmitConfig(task));
     }
 

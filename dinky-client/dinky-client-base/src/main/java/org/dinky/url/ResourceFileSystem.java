@@ -50,7 +50,7 @@ public class ResourceFileSystem extends FileSystem {
         }
         return INSTANCE;
     }
-    //todo 获取BaseResourceManager
+    // todo 获取BaseResourceManager
     public ResourceFileSystem() {
         this.BASE_RESOURCE_MANAGER = BaseResourceManager.getInstance();
     }
@@ -64,7 +64,7 @@ public class ResourceFileSystem extends FileSystem {
     public Path getHomeDirectory() {
         return null;
     }
-    //todo 代理的schema：rs:/
+    // todo 代理的schema：rs:/
     @Override
     public URI getUri() {
         return URI_SCHEMA;

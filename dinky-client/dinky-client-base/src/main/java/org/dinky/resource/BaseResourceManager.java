@@ -40,7 +40,7 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.lang.Opt;
 import cn.hutool.core.lang.Singleton;
 import cn.hutool.core.util.StrUtil;
-//todo 【资源管理核心类】
+
 public interface BaseResourceManager {
     SystemConfiguration instances = SystemConfiguration.getInstances();
 
