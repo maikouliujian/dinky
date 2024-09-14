@@ -31,21 +31,21 @@ import lombok.Data;
 @Data
 @ApiModel(value = "AppConfig", description = "Configuration for the Flink application")
 public class AppConfig {
-
+    //todo 用户程序的jar
     @ApiModelProperty(
             value = "Path to user JAR file",
             dataType = "String",
             example = "/path/to/user/app.jar",
             notes = "Path to the user's application JAR file")
     private String userJarPath;
-
+    //todo 用户程序的配置文件
     @ApiModelProperty(
             value = "User JAR file parameters",
             dataType = "String[]",
             example = "[]",
             notes = "Parameters to be passed to the user's application JAR file")
     private String[] userJarParas;
-
+    //todo 用户程序的main class
     @ApiModelProperty(
             value = "Main application class in the JAR file",
             dataType = "String",

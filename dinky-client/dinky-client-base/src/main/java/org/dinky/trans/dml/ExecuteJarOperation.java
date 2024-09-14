@@ -71,6 +71,7 @@ public class ExecuteJarOperation extends AbstractOperation implements ExtendOper
     }
 
     public Pipeline getStreamGraph(CustomTableEnvironment tEnv) {
+        //todo
         return getStreamGraph(tEnv, Collections.emptyList());
     }
 
@@ -79,7 +80,7 @@ public class ExecuteJarOperation extends AbstractOperation implements ExtendOper
         JarSubmitParam submitParam = JarSubmitParam.build(statement);
         return getStreamGraph(submitParam, tEnv, classpaths);
     }
-
+    //todo 这里要注意per-job和application模式的不同，主要是jar包地址和参数地址
     public static Pipeline getStreamGraph(
             JarSubmitParam submitParam, CustomTableEnvironment tEnv, List<URL> classpaths) {
         SavepointRestoreSettings savepointRestoreSettings = StrUtil.isBlank(submitParam.getSavepointPath())
@@ -89,10 +90,12 @@ public class ExecuteJarOperation extends AbstractOperation implements ExtendOper
         PackagedProgram program;
         try {
             Configuration configuration = tEnv.getConfig().getConfiguration();
+            //todo URLUtils::toFile【用户jar从资源中心下载到本地】
             File file =
                     Opt.ofBlankAble(submitParam.getUri()).map(URLUtils::toFile).orElse(null);
             String submitArgs = Opt.ofBlankAble(submitParam.getArgs()).orElse("");
             if (!PackagedProgramUtils.isPython(submitParam.getMainClass())) {
+                //todo 添加用户自定义jar
                 tEnv.addJar(file);
             } else {
                 // python submit
@@ -105,13 +108,14 @@ public class ExecuteJarOperation extends AbstractOperation implements ExtendOper
                     .setEntryPointClassName(submitParam.getMainClass())
                     .setConfiguration(configuration)
                     .setSavepointRestoreSettings(savepointRestoreSettings)
-                    // todo 设置args
+                    // todo 设置用户自定义jar的args
                     .setArguments(extractArgs(submitArgs.trim()).toArray(new String[0]))
                     .setUserClassPaths(classpaths)
                     .build();
             int parallelism = StrUtil.isNumeric(submitParam.getParallelism())
                     ? Convert.toInt(submitParam.getParallelism())
                     : tEnv.getStreamExecutionEnvironment().getParallelism();
+            //todo 进入flink client！！！！！！！
             Pipeline pipeline = PackagedProgramUtils.getPipelineFromProgram(program, configuration, parallelism, true);
 
             // When the UserCodeClassLoader is used to obtain the JobGraph in advance,
@@ -185,9 +189,10 @@ public class ExecuteJarOperation extends AbstractOperation implements ExtendOper
     @Getter
     public static class JarSubmitParam {
         protected JarSubmitParam() {}
-
+        //todo 执行sql jar中jar包的地址
         private String uri;
         private String mainClass;
+        //todo 用户自定义jar main参数
         private String args;
         private String parallelism;
         private String savepointPath;

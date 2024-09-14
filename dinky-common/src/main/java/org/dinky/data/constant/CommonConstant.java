@@ -31,7 +31,7 @@ public final class CommonConstant {
 
     /** 实例健康 */
     public static final String HEALTHY = "1";
-
+    //todo dinky main-class
     public static final String DINKY_APP_MAIN_CLASS = "org.dinky.app.MainApp";
     public static final String LineSep = System.getProperty("line.separator");
 

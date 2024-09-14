@@ -54,6 +54,7 @@ public class YarnPerJobGateway extends YarnGateway {
     @Override
     public GatewayResult submitJobGraph(JobGraph jobGraph) {
         if (Asserts.isNull(yarnClient)) {
+            //todo 初始化
             init();
         }
 

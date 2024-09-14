@@ -40,21 +40,21 @@ import lombok.Setter;
 @Setter
 @ApiModel(value = "ClusterConfig", description = "Configuration for a Flink cluster")
 public class ClusterConfig {
-
+    //todo 集群配置中的 Flink 配置文件路径
     @ApiModelProperty(
             value = "Path to Flink configuration file",
             dataType = "String",
             example = "/opt/flink/conf/flink-conf.yaml",
             notes = "Path to the Flink configuration file")
     private String flinkConfigPath;
-
+    //todo 集群配置中的 Flink Lib 路径
     @ApiModelProperty(
             value = "Path to Flink library directory",
             dataType = "String",
             example = "/opt/flink/lib",
             notes = "Path to the Flink library directory")
     private String flinkLibPath;
-
+    //todo 集群配置中的 Hadoop 配置文件路径
     @ApiModelProperty(
             value = "Path to YARN configuration file",
             dataType = "String",

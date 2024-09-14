@@ -31,10 +31,10 @@
     <name>Dinky : Client : Hadoop</name>
 
     <properties>
-        <!--<scope.type>provided</scope.type>-->
         <hadoop.version>3.3.2</hadoop.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <scope.type>compile</scope.type>
+        <scope.type>provided</scope.type>
+        <!--        <scope.type>compile</scope.type>-->
     </properties>
 
     <dependencies>

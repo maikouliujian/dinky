@@ -119,6 +119,7 @@ public abstract class YarnGateway extends AbstractGateway {
         final ClusterConfig clusterConfig = config.getClusterConfig();
         configuration = GlobalConfiguration.loadConfiguration(
                 clusterConfig.getFlinkConfigPath().trim());
+        //todo 设置classloader.resolve-order：parent-first
         configuration.set(CoreOptions.CLASSLOADER_RESOLVE_ORDER, "parent-first");
 
         final FlinkConfig flinkConfig = config.getFlinkConfig();
@@ -131,7 +132,7 @@ public abstract class YarnGateway extends AbstractGateway {
         }
 
         configuration.set(DeploymentOptions.TARGET, getType().getLongValue());
-        // todo flink lib可预先上传到hdfs上
+        // todo flink lib可预先上传到hdfs上【设置yarn.provided.lib.dirs】
         configuration.set(
                 YarnConfigOptions.PROVIDED_LIB_DIRS, Collections.singletonList(clusterConfig.getFlinkLibPath()));
         if (Asserts.isNotNullString(flinkConfig.getJobName())) {
@@ -139,6 +140,7 @@ public abstract class YarnGateway extends AbstractGateway {
         }
 
         if (Asserts.isNotNullString(clusterConfig.getHadoopConfigPath())) {
+            //todo fs.hdfs.hadoopconf
             configuration.setString(
                     ConfigConstants.PATH_HADOOP_CONFIG,
                     FileUtil.file(clusterConfig.getHadoopConfigPath()).getAbsolutePath());

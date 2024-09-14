@@ -258,6 +258,7 @@ public class Submitter {
         for (String statement : statements) {
             if (ExecuteJarParseStrategy.INSTANCE.match(statement)) {
                 ExecuteJarOperation executeJarOperation = new ExecuteJarOperation(statement);
+                //todo 获取StreamGraph
                 Pipeline pipeline = executeJarOperation.getStreamGraph(executor.getCustomTableEnvironment());
                 ReadableConfig configuration =
                         executor.getStreamExecutionEnvironment().getConfiguration();
