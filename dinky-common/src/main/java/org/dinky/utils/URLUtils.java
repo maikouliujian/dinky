@@ -39,7 +39,7 @@ import cn.hutool.core.util.StrUtil;
  * @since 0.7.0
  */
 public class URLUtils {
-    // todo 下载jar包到本地的目录：/tmp/rs/......
+    // todo 下载jar包到本地的目录：/tmp/rs/......,不做删除清理么？？？？？？
     private static final String TMP_PATH = StrUtil.join(File.separator, System.getProperty("user.dir"), "tmp");
 
     /**

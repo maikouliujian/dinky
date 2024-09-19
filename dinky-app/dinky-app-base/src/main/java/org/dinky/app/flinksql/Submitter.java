@@ -258,7 +258,7 @@ public class Submitter {
         for (String statement : statements) {
             if (ExecuteJarParseStrategy.INSTANCE.match(statement)) {
                 ExecuteJarOperation executeJarOperation = new ExecuteJarOperation(statement);
-                // todo 获取StreamGraph
+                // todo 获取StreamGraph！！！！！！
                 Pipeline pipeline = executeJarOperation.getStreamGraph(executor.getCustomTableEnvironment());
                 ReadableConfig configuration =
                         executor.getStreamExecutionEnvironment().getConfiguration();
@@ -283,7 +283,7 @@ public class Submitter {
                             .configure(configuration, Thread.currentThread().getContextClassLoader());
                     plan.setJobName(executor.getExecutorConfig().getJobName());
                 }
-                // todo
+                // todo 执行job
                 JobClient client =
                         FlinkStreamEnvironmentUtil.executeAsync(pipeline, executor.getStreamExecutionEnvironment());
                 jobClient = Optional.of(client);

@@ -80,18 +80,18 @@ public class YarnApplicationGateway extends YarnGateway {
         }
 
         AppConfig appConfig = config.getAppConfig();
-        // todo 上传用户程序的jar包
+        // todo 上传dinky task的jar包【集群配置中的jar文件路径 ===> 如 rs:/dinky-app-1.14-1.1.0-jar-with-dependencies.jar】
         configuration.set(PipelineOptions.JARS, Collections.singletonList(formatUrl(appConfig.getUserJarPath())));
         configuration.setString(
                 "python.files",
                 udfPathContextHolder.getPyUdfFile().stream().map(File::getName).collect(Collectors.joining(",")));
-        // todo 上传用户程序的配置文件
+        // todo 上传dinky task的配置文件
         String[] userJarParas =
                 Asserts.isNotNull(appConfig.getUserJarParas()) ? appConfig.getUserJarParas() : new String[0];
 
         ClusterSpecification.ClusterSpecificationBuilder clusterSpecificationBuilder =
                 createClusterSpecificationBuilder();
-        // todo 用户程序的main class
+        // todo dinky task的main class【DINKY_APP_MAIN_CLASS = "org.dinky.app.MainApp"】
         ApplicationConfiguration applicationConfiguration =
                 new ApplicationConfiguration(userJarParas, appConfig.getUserJarMainAppClass());
 
@@ -100,6 +100,7 @@ public class YarnApplicationGateway extends YarnGateway {
         try (YarnClusterDescriptor yarnClusterDescriptor = createYarnClusterDescriptorWithJar(udfPathContextHolder)) {
             ClusterDescriptorAdapterImpl clusterDescriptorAdapter =
                     new ClusterDescriptorAdapterImpl(yarnClusterDescriptor);
+            //todo 将flink jar sql内容添加为ShipFiles
             clusterDescriptorAdapter.addShipFiles(Arrays.asList(preparSqlFile()));
             addConfigParas(
                     CustomerConfigureOptions.EXEC_SQL_FILE, configuration.get(CustomerConfigureOptions.EXEC_SQL_FILE));

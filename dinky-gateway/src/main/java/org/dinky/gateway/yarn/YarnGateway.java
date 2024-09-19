@@ -233,11 +233,13 @@ public abstract class YarnGateway extends AbstractGateway {
 
         ApplicationId applicationId = getApplicationId();
         YarnClusterDescriptor clusterDescriptor = createInitYarnClusterDescriptor();
+        //todo 执行savepoint
         SavePointResult result = runSavePointResult(savePoint, applicationId, clusterDescriptor);
 
         if (ActionType.CANCEL == config.getFlinkConfig().getAction()
                 || SavePointType.CANCEL.equals(config.getFlinkConfig().getSavePointType())) {
             try {
+                //todo 取消task
                 autoCancelCluster(clusterDescriptor.retrieve(applicationId).getClusterClient());
             } catch (ClusterRetrieveException e) {
                 logger.error(e.getMessage());
@@ -447,6 +449,7 @@ public abstract class YarnGateway extends AbstractGateway {
     protected File preparSqlFile() {
         File tempSqlFile = new File(
                 String.format("%s/%s", TMP_SQL_EXEC_DIR, configuration.get(CustomerConfigureOptions.EXEC_SQL_FILE)));
+        //todo 2024-09-14 15:24:46.114 INFO  org.dinky.gateway.AbstractGateway(448): Temp sql file path : /opt/dinky/tmp/sql-exec/1e8c17cc-f6f3-4326-8357-d7594f4f022c/job.sql
         logger.info("Temp sql file path : {}", tempSqlFile.getAbsolutePath());
         String sql = config == null ? "" : config.getSql();
         FileUtil.writeString(Optional.ofNullable(sql).orElse(""), tempSqlFile.getAbsolutePath(), "UTF-8");

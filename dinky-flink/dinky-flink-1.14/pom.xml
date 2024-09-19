@@ -85,6 +85,13 @@
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-yarn_2.12</artifactId>
             <version>${flink.version}</version>
+            <!-- todo   hadoop中commons-math3的版本和flink中commons-math3的版本不一直，会导致ckp无法显示，需要排除-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-math3</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>

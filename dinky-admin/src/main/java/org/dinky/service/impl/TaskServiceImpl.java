@@ -239,7 +239,9 @@ public class TaskServiceImpl extends SuperServiceImpl<TaskMapper, Task> implemen
             log.info("Init gateway config, type:{}", task.getType());
             FlinkClusterConfig flinkClusterCfg =
                     clusterCfgService.getFlinkClusterCfg(config.getClusterConfigurationId());
+            //todo 设置dinky task的main 参数
             flinkClusterCfg.getAppConfig().setUserJarParas(buildParams(config.getTaskId()));
+            //todo 设置dinky task的main class
             flinkClusterCfg.getAppConfig().setUserJarMainAppClass(CommonConstant.DINKY_APP_MAIN_CLASS);
             config.buildGatewayConfig(flinkClusterCfg);
             config.setClusterId(null);
@@ -455,8 +457,10 @@ public class TaskServiceImpl extends SuperServiceImpl<TaskMapper, Task> implemen
         boolean isSuccess;
         try {
             if (withSavePoint) {
+                //todo 智能取消
                 savepointTaskJob(task, SavePointType.CANCEL);
             } else {
+                //todo 普通取消
                 jobManager.cancelNormal(jobInstance.getJid());
             }
             isSuccess = true;

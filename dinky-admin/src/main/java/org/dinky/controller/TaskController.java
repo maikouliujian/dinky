@@ -113,7 +113,7 @@ public class TaskController {
         }
         return Result.failed(result, Status.DEBUG_FAILED);
     }
-
+    //todo 只能停止：withSavePoint=true&forceCancel=true
     @GetMapping("/cancel")
     @Log(title = "Cancel Flink Job", businessType = BusinessType.TRIGGER)
     @ApiOperation("Cancel Flink Job")
