@@ -104,7 +104,7 @@ public class ExecuteJarOperation extends AbstractOperation implements ExtendOper
             }
 
             program = PackagedProgram.newBuilder()
-                    .setJarFile(file)
+                    .setJarFile(file) //todo 设置用户自定义jar包
                     .setEntryPointClassName(submitParam.getMainClass())
                     .setConfiguration(configuration)
                     .setSavepointRestoreSettings(savepointRestoreSettings)

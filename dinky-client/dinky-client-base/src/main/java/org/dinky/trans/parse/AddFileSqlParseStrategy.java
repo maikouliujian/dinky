@@ -40,6 +40,7 @@ import cn.hutool.core.util.StrUtil;
 /**
  * @since 0.7.0
  */
+//todo add file解析策略，如：ADD FILE 'rs:///dw/application.yaml';
 public class AddFileSqlParseStrategy extends AbstractRegexParseStrategy {
 
     private static final String ADD_FILE = "(add\\s+file)\\s+'(.*)'";
@@ -68,6 +69,7 @@ public class AddFileSqlParseStrategy extends AbstractRegexParseStrategy {
                 .distinct()
                 .forEach(urlPath -> {
                     try {
+                        //todo 将file文件下载到本地
                         File file = URLUtils.toFile(urlPath);
                         if (file == null || !file.exists()) {
                             throw new DinkyException(StrUtil.format("file : {} not exists!", urlPath));

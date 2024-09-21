@@ -25,6 +25,14 @@ import lombok.Data;
 /**
  * Dinky configuration information passed by the submit Application task
  */
+
+/***
+ * AppParamConfig{
+ *   taskId=4
+ * , url='jdbc:mysql://10.145.48.88:9988/dinky_test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true'
+ * , username='dinky'
+ * , password='***********'}
+ */
 @Data
 @Builder
 public class AppParamConfig {

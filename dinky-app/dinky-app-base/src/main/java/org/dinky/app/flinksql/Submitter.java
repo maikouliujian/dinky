@@ -250,15 +250,36 @@ public class Submitter {
             return false;
         }
     }
-
+    //todo for application mode
     @SneakyThrows
     public static Optional<JobClient> executeJarJob(String type, Executor executor, String[] statements) {
         Optional<JobClient> jobClient = Optional.empty();
-
+        //todo 遍历每一条可执行的sql
+        /***
+         * 如：
+         *  sql 1 ADD FILE 'rs:///dw/application.yaml';
+         *  sql 2
+         * EXECUTE JAR WITH (
+         * 'uri'='rs:///git/dw_test/dw_bondee_log_preprocess-1.0-SNAPSHOT.jar',
+         * 'main-class'='com.yidian.data.BondeeLogprocess',
+         * 'args'='--conf ./application.yaml',
+         * 'parallelism'='2'
+         * );
+         */
         for (String statement : statements) {
+            // todo 匹配上执行jar sql
+            // todo 如：
+            /***
+             * EXECUTE JAR WITH (
+             * 'uri'='rs:///git/dw_test/dw_bondee_log_preprocess-1.0-SNAPSHOT.jar',
+             * 'main-class'='com.yidian.data.BondeeLogprocess',
+             * 'args'='--conf ./application.yaml',
+             * 'parallelism'='2'
+             * );
+             */
             if (ExecuteJarParseStrategy.INSTANCE.match(statement)) {
                 ExecuteJarOperation executeJarOperation = new ExecuteJarOperation(statement);
-                // todo 获取StreamGraph！！！！！！
+                // todo 在集群中生成StreamGraph！！！！！！
                 Pipeline pipeline = executeJarOperation.getStreamGraph(executor.getCustomTableEnvironment());
                 ReadableConfig configuration =
                         executor.getStreamExecutionEnvironment().getConfiguration();
@@ -283,7 +304,7 @@ public class Submitter {
                             .configure(configuration, Thread.currentThread().getContextClassLoader());
                     plan.setJobName(executor.getExecutorConfig().getJobName());
                 }
-                // todo 执行job
+                // todo 执行job才会返回jobClient
                 JobClient client =
                         FlinkStreamEnvironmentUtil.executeAsync(pipeline, executor.getStreamExecutionEnvironment());
                 jobClient = Optional.of(client);
@@ -296,6 +317,12 @@ public class Submitter {
                     executor.addJar(info);
                 }
             } else if (Operations.getOperationType(statement) == SqlType.ADD_FILE) {
+                //todo 匹配上add file sql：将文件加入到集群中
+                //todo 如：
+                /***
+                 * ADD FILE 'rs:///dw/application.yaml';
+                 */
+                //todo 会将file文件从资源中心下载到本地
                 File[] info = AddFileSqlParseStrategy.getInfo(statement);
                 Arrays.stream(info).forEach(executor.getDinkyClassLoader().getUdfPathContextHolder()::addFile);
                 if (GatewayType.get(type).isKubernetesApplicationMode()) {

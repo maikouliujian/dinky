@@ -77,7 +77,7 @@ public interface CustomTableEnvironment
     default List<LineageRel> getLineage(String statement) {
         return Collections.emptyList();
     }
-
+    //todo PipelineOptions.JARS下所有的jars都会被传入集群中
     default void addJar(File... jarPath) {
         Configuration configuration = this.getRootConfiguration();
         List<String> pathList =
@@ -86,6 +86,7 @@ public interface CustomTableEnvironment
         if (jars == null) {
             addConfiguration(PipelineOptions.JARS, pathList);
         } else {
+            //todo 将pathList加入到jars中
             CollUtil.addAll(jars, pathList);
         }
     }

@@ -47,6 +47,13 @@ public class MainApp {
         boolean isEncrypt = parameters.getBoolean(AppParamConstant.isEncrypt, true);
         String config = parameters.get(AppParamConstant.config);
         config = isEncrypt ? new String(Base64.getDecoder().decode(config)) : config;
+        /***
+         * AppParamConfig{
+         *   taskId=4
+         * , url='jdbc:mysql://10.145.48.88:9988/dinky_test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true'
+         * , username='dinky'
+         * , password='***********'}
+         */
         AppParamConfig appConfig = JsonUtils.toJavaBean(config, AppParamConfig.class);
         log.info("dinky app is Ready to run, config is {}", appConfig);
         DBUtil.init(appConfig);

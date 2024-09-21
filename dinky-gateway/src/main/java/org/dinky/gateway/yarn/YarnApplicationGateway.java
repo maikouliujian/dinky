@@ -91,7 +91,7 @@ public class YarnApplicationGateway extends YarnGateway {
 
         ClusterSpecification.ClusterSpecificationBuilder clusterSpecificationBuilder =
                 createClusterSpecificationBuilder();
-        // todo dinky task的main class【DINKY_APP_MAIN_CLASS = "org.dinky.app.MainApp"】
+        // todo dinky task的main class【DINKY_APP_MAIN_CLASS = "org.dinky.app.MainApp"】【与per-job模式的不同！！！！！！】
         ApplicationConfiguration applicationConfiguration =
                 new ApplicationConfiguration(userJarParas, appConfig.getUserJarMainAppClass());
 
@@ -101,6 +101,7 @@ public class YarnApplicationGateway extends YarnGateway {
             ClusterDescriptorAdapterImpl clusterDescriptorAdapter =
                     new ClusterDescriptorAdapterImpl(yarnClusterDescriptor);
             //todo 将flink jar sql内容添加为ShipFiles
+            //todo 2024-09-14 15:24:46.114 INFO  org.dinky.gateway.AbstractGateway(448): Temp sql file path : /opt/dinky/tmp/sql-exec/1e8c17cc-f6f3-4326-8357-d7594f4f022c/job.sql
             clusterDescriptorAdapter.addShipFiles(Arrays.asList(preparSqlFile()));
             addConfigParas(
                     CustomerConfigureOptions.EXEC_SQL_FILE, configuration.get(CustomerConfigureOptions.EXEC_SQL_FILE));

@@ -71,6 +71,7 @@ public class YarnPerJobGateway extends YarnGateway {
         try (YarnClusterDescriptor yarnClusterDescriptor = createInitYarnClusterDescriptor()) {
             ClusterDescriptorAdapterImpl clusterDescriptorAdapter =
                     new ClusterDescriptorAdapterImpl(yarnClusterDescriptor);
+            //todo per-job模式下sql路径
             clusterDescriptorAdapter.addShipFiles(Arrays.asList(preparSqlFile()));
             addConfigParas(
                     CustomerConfigureOptions.EXEC_SQL_FILE, configuration.get(CustomerConfigureOptions.EXEC_SQL_FILE));

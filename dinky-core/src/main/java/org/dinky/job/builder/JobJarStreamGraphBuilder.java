@@ -162,7 +162,7 @@ public class JobJarStreamGraphBuilder extends JobBuilder {
             job.setStatus(Job.JobStatus.FAILED);
         }
     }
-
+    //todo for per-job mode
     public Pipeline getJarStreamGraph(String statement, DinkyClassLoader dinkyClassLoader) {
         DinkyClassLoaderUtil.initClassLoader(config, dinkyClassLoader);
         String[] statements = SqlUtil.getStatements(statement);
@@ -170,6 +170,15 @@ public class JobJarStreamGraphBuilder extends JobBuilder {
         for (String sql : statements) {
             String sqlStatement = executor.pretreatStatement(sql);
             // todo 匹配上执行jar sql
+            // todo 如：
+            /***
+             * EXECUTE JAR WITH (
+             * 'uri'='rs:///git/dw_test/dw_bondee_log_preprocess-1.0-SNAPSHOT.jar',
+             * 'main-class'='com.yidian.data.BondeeLogprocess',
+             * 'args'='--conf ./application.yaml',
+             * 'parallelism'='2'
+             * );
+             */
             if (ExecuteJarParseStrategy.INSTANCE.match(sqlStatement)) {
                 executeJarOperation = new ExecuteJarOperation(sqlStatement);
                 break;
@@ -183,6 +192,11 @@ public class JobJarStreamGraphBuilder extends JobBuilder {
                 files.forEach(executor::addJar);
                 files.forEach(jobManager.getUdfPathContextHolder()::addOtherPlugins);
             } else if (operationType.equals(SqlType.ADD_FILE)) {
+                //todo 匹配上add file sql：将文件加入到集群中
+                //todo 如：
+                /***
+                 * ADD FILE 'rs:///dw/application.yaml';
+                 */
                 Set<File> files = AddFileSqlParseStrategy.getAllFilePath(sqlStatement);
                 files.forEach(executor::addJar);
                 files.forEach(jobManager.getUdfPathContextHolder()::addFile);
