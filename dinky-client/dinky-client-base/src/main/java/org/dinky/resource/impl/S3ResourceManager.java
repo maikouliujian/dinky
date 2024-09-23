@@ -40,23 +40,30 @@ import java.util.Map;
 
 public class S3ResourceManager implements BaseResourceManager {
     private S3Template s3Template;
+    private String removeFirstSlash(String path) {
+        if (path.startsWith("/")){
+            return path.substring(1);
+        } else {
+            return path;
+        }
+    }
     @Override
     public void remove(String path) {
-        getS3Template().removeObject(getS3Template().getBucketName(), getFilePath(path));
+        getS3Template().removeObject(getS3Template().getBucketName(), removeFirstSlash(getFilePath(path)));
     }
 
     @Override
     public void rename(String path, String newPath) {
         CopyObjectRequest copyReq = CopyObjectRequest.builder()
                 .sourceBucket(getS3Template().getBucketName())
-                .sourceKey(getFilePath(path))
+                .sourceKey(removeFirstSlash(getFilePath(path)))
                 .destinationBucket(getS3Template().getBucketName())
-                .destinationKey(getFilePath(newPath))
+                .destinationKey(removeFirstSlash(getFilePath(newPath)))
                 .build();
         getS3Template().getAmazonS3().copyObject(copyReq);
         DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
                 .bucket(getS3Template().getBucketName())
-                .key(getFilePath(path))
+                .key(removeFirstSlash(getFilePath(path)))
                 .build();
         getS3Template().getAmazonS3().deleteObject(deleteObjectRequest);
     }
@@ -64,7 +71,7 @@ public class S3ResourceManager implements BaseResourceManager {
     @Override
     public void putFile(String path, InputStream fileStream) {
         try {
-            getS3Template().putObject(getS3Template().getBucketName(), getFilePath(path).substring(1), fileStream);
+            getS3Template().putObject(getS3Template().getBucketName(), removeFirstSlash(getFilePath(path)), fileStream);
         } catch (Exception e) {
             throw new BusException(Status.RESOURCE_FILE_UPLOAD_FAILED, e);
         }
@@ -73,7 +80,7 @@ public class S3ResourceManager implements BaseResourceManager {
     public void putFile(String path, File file) {
         try {
             getS3Template()
-                    .putObject(getS3Template().getBucketName(), getFilePath(path).substring(1), FileUtil.getInputStream(file));
+                    .putObject(getS3Template().getBucketName(), removeFirstSlash(getFilePath(path)), FileUtil.getInputStream(file));
         } catch (Exception e) {
             throw new BusException(Status.RESOURCE_FILE_UPLOAD_FAILED, e);
         }
@@ -129,7 +136,7 @@ public class S3ResourceManager implements BaseResourceManager {
     @Override
     public InputStream readFile(String path) {
         return getS3Template()
-                .getObject(getS3Template().getBucketName(), path);
+                .getObject(getS3Template().getBucketName(), removeFirstSlash(path));
     }
 
     public S3Template getS3Template() {
