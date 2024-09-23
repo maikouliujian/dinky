@@ -306,7 +306,7 @@ public class SystemConfiguration {
             ReflectUtil.setFieldValue(dinkyAddr, "defaultValue", System.getProperty("dinkyAddr"));
         }
     }
-
+    //todo 设置配置的新值！！！！！！！
     public void setConfiguration(String key, String value) {
         CONFIGURATION_LIST.stream().filter(x -> x.getKey().equals(key)).forEach(item -> {
             if (value == null) {

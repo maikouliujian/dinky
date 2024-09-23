@@ -245,6 +245,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourcesMapper, Resources>
         }
         long size = file.length();
         String fileName = file.getName();
+        //todo 上传文件
         upload(pid, desc, (fullName) -> getBaseResourceManager().putFile(fullName, file), fileName, pResource, size);
     }
 
@@ -287,7 +288,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourcesMapper, Resources>
         resourceByPidToParent.forEach(x -> x.setSize(x.getSize() + size));
         updateBatchById(resourceByPidToParent);
     }
-
+    //todo 上传文件！！！！！！
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void uploadFile(Integer pid, String desc, MultipartFile file) {
@@ -304,6 +305,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourcesMapper, Resources>
                 desc,
                 (fullName) -> {
                     try {
+                        //todo 上传文件
                         getBaseResourceManager().putFile(fullName, file.getInputStream());
                     } catch (IOException e) {
                         throw new RuntimeException(e);

@@ -70,6 +70,7 @@
         <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
         <httpclient.version>4.5.13</httpclient.version>
         <hutool.version>5.8.27</hutool.version>
+        <aws.java.sdk.version>2.20.156</aws.java.sdk.version>
         <jackson.version>2.14.1</jackson.version>
         <jakarta.ws.rs-api.version>2.1.6</jakarta.ws.rs-api.version>
         <jasypt.version>1.9.3</jasypt.version>
@@ -707,6 +708,17 @@
                 <groupId>com.google.auto.service</groupId>
                 <artifactId>auto-service</artifactId>
                 <version>1.1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>s3</artifactId>
+                <version>${aws.java.sdk.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>sts</artifactId>
+                <version>${aws.java.sdk.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

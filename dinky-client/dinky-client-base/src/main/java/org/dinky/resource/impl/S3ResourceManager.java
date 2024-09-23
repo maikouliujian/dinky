@@ -19,11 +19,17 @@
 
 package org.dinky.resource.impl;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.StrUtil;
 import org.dinky.data.enums.Status;
 import org.dinky.data.exception.BusException;
 import org.dinky.data.model.ResourcesVO;
-import org.dinky.oss.OssTemplate;
 import org.dinky.resource.BaseResourceManager;
+import org.dinky.s3.S3Template;
+import software.amazon.awssdk.services.s3.model.CopyObjectRequest;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Object;
 
 import java.io.File;
 import java.io.InputStream;
@@ -32,49 +38,42 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.amazonaws.services.s3.model.CopyObjectRequest;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
-
-import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.util.StrUtil;
-
-public class OssResourceManager implements BaseResourceManager {
-    OssTemplate ossTemplate;
-
+public class S3ResourceManager implements BaseResourceManager {
+    private S3Template s3Template;
     @Override
     public void remove(String path) {
-        getOssTemplate().removeObject(getOssTemplate().getBucketName(), getFilePath(path));
+        getS3Template().removeObject(getS3Template().getBucketName(), getFilePath(path));
     }
 
     @Override
     public void rename(String path, String newPath) {
-        CopyObjectRequest copyObjectRequest = new CopyObjectRequest(
-                getOssTemplate().getBucketName(),
-                getFilePath(path),
-                getOssTemplate().getBucketName(),
-                getFilePath(newPath));
-        getOssTemplate().getAmazonS3().copyObject(copyObjectRequest);
-        DeleteObjectRequest deleteObjectRequest =
-                new DeleteObjectRequest(getOssTemplate().getBucketName(), getFilePath(path));
-        getOssTemplate().getAmazonS3().deleteObject(deleteObjectRequest);
+        CopyObjectRequest copyReq = CopyObjectRequest.builder()
+                .sourceBucket(getS3Template().getBucketName())
+                .sourceKey(getFilePath(path))
+                .destinationBucket(getS3Template().getBucketName())
+                .destinationKey(getFilePath(newPath))
+                .build();
+        getS3Template().getAmazonS3().copyObject(copyReq);
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                .bucket(getS3Template().getBucketName())
+                .key(getFilePath(path))
+                .build();
+        getS3Template().getAmazonS3().deleteObject(deleteObjectRequest);
     }
 
     @Override
     public void putFile(String path, InputStream fileStream) {
         try {
-            getOssTemplate().putObject(getOssTemplate().getBucketName(), getFilePath(path), fileStream);
+            getS3Template().putObject(getS3Template().getBucketName(), getFilePath(path).substring(1), fileStream);
         } catch (Exception e) {
             throw new BusException(Status.RESOURCE_FILE_UPLOAD_FAILED, e);
         }
     }
-    //todo oss上传文件
     @Override
     public void putFile(String path, File file) {
         try {
-            getOssTemplate()
-                    .putObject(getOssTemplate().getBucketName(), getFilePath(path), FileUtil.getInputStream(file));
+            getS3Template()
+                    .putObject(getS3Template().getBucketName(), getFilePath(path).substring(1), FileUtil.getInputStream(file));
         } catch (Exception e) {
             throw new BusException(Status.RESOURCE_FILE_UPLOAD_FAILED, e);
         }
@@ -94,16 +93,16 @@ public class OssResourceManager implements BaseResourceManager {
             }
         }
 
-        List<S3ObjectSummary> listBucketObjects =
-                getOssTemplate().listBucketObjects(getOssTemplate().getBucketName(), basePath);
+        List<S3Object> listBucketObjects =
+                getS3Template().listBucketObjects(getS3Template().getBucketName(), basePath);
         Map<Integer, ResourcesVO> resourcesMap = new HashMap<>();
 
-        for (S3ObjectSummary obj : listBucketObjects) {
-            obj.setKey(obj.getKey().replace(basePath, ""));
-            if (obj.getKey().isEmpty()) {
+        for (S3Object obj : listBucketObjects) {
+            String key = obj.key().replace(basePath, "");
+            if (key.isEmpty()) {
                 continue;
             }
-            String[] split = obj.getKey().split("/");
+            String[] split = key.split("/");
             String parent = "";
             for (int i = 0; i < split.length; i++) {
                 String s = split[i];
@@ -114,10 +113,10 @@ public class OssResourceManager implements BaseResourceManager {
                         .pid(pid)
                         .fullName(parent)
                         .fileName(s)
-                        .isDirectory(obj.getKey().endsWith("/"))
-                        .size(obj.getSize());
+                        .isDirectory(key.endsWith("/"))
+                        .size(obj.size());
                 if (i == split.length - 1) {
-                    builder.isDirectory(obj.getKey().endsWith("/"));
+                    builder.isDirectory(key.endsWith("/"));
                 } else {
                     builder.isDirectory(true);
                 }
@@ -129,19 +128,18 @@ public class OssResourceManager implements BaseResourceManager {
 
     @Override
     public InputStream readFile(String path) {
-        return getOssTemplate()
-                .getObject(getOssTemplate().getBucketName(), getFilePath(path))
-                .getObjectContent();
+        return getS3Template()
+                .getObject(getS3Template().getBucketName(), path);
     }
 
-    public OssTemplate getOssTemplate() {
-        if (ossTemplate == null && instances.getResourcesEnable().getValue()) {
+    public S3Template getS3Template() {
+        if (s3Template == null && instances.getResourcesEnable().getValue()) {
             throw new BusException(Status.RESOURCE_OSS_CONFIGURATION_ERROR);
         }
-        return ossTemplate;
+        return s3Template;
     }
 
-    public void setOssTemplate(OssTemplate ossTemplate) {
-        this.ossTemplate = ossTemplate;
+    public void setS3Template(S3Template s3Template) {
+        this.s3Template = s3Template;
     }
 }

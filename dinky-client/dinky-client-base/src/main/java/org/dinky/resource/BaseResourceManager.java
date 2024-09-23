@@ -40,6 +40,8 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.lang.Opt;
 import cn.hutool.core.lang.Singleton;
 import cn.hutool.core.util.StrUtil;
+import org.dinky.resource.impl.S3ResourceManager;
+import org.dinky.s3.S3Template;
 
 public interface BaseResourceManager {
     SystemConfiguration instances = SystemConfiguration.getInstances();
@@ -63,7 +65,8 @@ public interface BaseResourceManager {
             case HDFS:
                 return Singleton.get(HdfsResourceManager.class);
             case OSS:
-                return Singleton.get(OssResourceManager.class);
+                //return Singleton.get(OssResourceManager.class);
+                return Singleton.get(S3ResourceManager.class);
             case LOCAL:
                 return Singleton.get(LocalResourceManager.class);
             default:
@@ -76,8 +79,10 @@ public interface BaseResourceManager {
             case LOCAL:
                 Singleton.get(LocalResourceManager.class);
             case OSS:
-                OssTemplate template = new OssTemplate(instances.getOssProperties());
-                Singleton.get(OssResourceManager.class).setOssTemplate(template);
+//                OssTemplate template = new OssTemplate(instances.getOssProperties());
+//                Singleton.get(OssResourceManager.class).setOssTemplate(template);
+                S3Template template = new S3Template(instances.getOssProperties());
+                Singleton.get(S3ResourceManager.class).setS3Template(template);
                 break;
             case HDFS:
                 final Configuration configuration = new Configuration();
