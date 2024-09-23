@@ -1,46 +1,61 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *  Licensed to the Apache Software Foundation (ASF) under one or more
+ *  contributor license agreements.  See the NOTICE file distributed with
+ *  this work for additional information regarding copyright ownership.
+ *  The ASF licenses this file to You under the Apache License, Version 2.0
+ *  (the "License"); you may not use this file except in compliance with
+ *  the License.  You may obtain a copy of the License at
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
  */
 
 package org.dinky.s3;
 
-import com.amazonaws.AmazonServiceException;
 import org.dinky.data.properties.OssProperties;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.amazonaws.AmazonServiceException;
+
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.*;
 import software.amazon.awssdk.services.sts.StsClient;
+import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.S3Exception;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
+import software.amazon.awssdk.services.s3.model.S3Object;
 import software.amazon.awssdk.services.sts.model.GetCallerIdentityResponse;
 import software.amazon.awssdk.utils.StringUtils;
-
-import java.io.*;
-import java.net.URI;
-import java.util.*;
-
 
 public class S3Template {
     private static final Logger logger = LoggerFactory.getLogger(S3Template.class);
     private S3Client s3Client = null;
     private final OssProperties ossProperties;
+
     public S3Template(OssProperties ossProperties) {
         this.ossProperties = ossProperties;
         String accesskeyId = ossProperties.getAccessKey();
@@ -49,7 +64,7 @@ public class S3Template {
         String region = ossProperties.getRegion();
         String bucketName = ossProperties.getBucketName();
         StsClient stsClient = null;
-        if(StringUtils.isNotBlank(accesskeyId) && StringUtils.isNotBlank(secretKeyId)) {
+        if (StringUtils.isNotBlank(accesskeyId) && StringUtils.isNotBlank(secretKeyId)) {
             if (StringUtils.isNotBlank(endPoint)) {
                 s3Client = S3Client.builder()
                         .region(Region.of(region))
@@ -109,24 +124,22 @@ public class S3Template {
 
     private boolean doesBucketExist(String bucketName) {
         try {
-            HeadBucketRequest headBucketRequest = HeadBucketRequest.builder()
-                    .bucket(bucketName)
-                    .build();
+            HeadBucketRequest headBucketRequest =
+                    HeadBucketRequest.builder().bucket(bucketName).build();
             s3Client.headBucket(headBucketRequest);
             return true;
-        } catch (software.amazon.awssdk.services.s3.model.S3Exception e) {
+        } catch (S3Exception e) {
             logger.error("doesBucketExist fail", e);
             return false;
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.error("doesBucketExist exception fail", e);
             return false;
         }
     }
+
     public ResponseInputStream<GetObjectResponse> getObject(String bucketName, String objectName) {
-        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                .bucket(bucketName)
-                .key(objectName)
-                .build();
+        GetObjectRequest getObjectRequest =
+                GetObjectRequest.builder().bucket(bucketName).key(objectName).build();
         return s3Client.getObject(getObjectRequest);
     }
 
@@ -136,7 +149,8 @@ public class S3Template {
 
     public boolean upload(String bucketName, String objectName, InputStream stream) throws IOException {
         try {
-            PutObjectRequest putObjectRequest = PutObjectRequest.builder().bucket(bucketName)
+            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                    .bucket(bucketName)
                     .key(objectName)
                     .build();
             s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(stream, stream.available()));
@@ -146,13 +160,13 @@ public class S3Template {
             return false;
         }
     }
+
     public void removeObject(String bucketName, String objectName) {
-        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
-                .bucket(bucketName)
-                .key(objectName)
-                .build();
+        DeleteObjectRequest deleteObjectRequest =
+                DeleteObjectRequest.builder().bucket(bucketName).key(objectName).build();
         s3Client.deleteObject(deleteObjectRequest);
     }
+
     public List<S3Object> listBucketObjects(String bucketName, String prefix) {
         List<S3Object> s3ObjectSummaries = new ArrayList<>();
         ListObjectsV2Request listObjectsRequest =
@@ -162,17 +176,17 @@ public class S3Template {
             listing = s3Client.listObjectsV2(listObjectsRequest);
             s3ObjectSummaries.addAll(listing.contents());
             String token = listing.nextContinuationToken();
-            listObjectsRequest = listObjectsRequest.toBuilder()
-                    .continuationToken(token)
-                    .build();
+            listObjectsRequest =
+                    listObjectsRequest.toBuilder().continuationToken(token).build();
         } while (listing.isTruncated());
         return s3ObjectSummaries;
     }
+
     public S3Client getAmazonS3() {
         return s3Client;
     }
+
     public String getBucketName() {
         return ossProperties.getBucketName();
     }
-
 }
