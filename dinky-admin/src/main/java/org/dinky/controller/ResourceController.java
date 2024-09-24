@@ -148,7 +148,7 @@ public class ResourceController {
         resourcesService.uploadFile(pid, desc, file);
         return Result.succeed();
     }
-
+    //todo 删除文件
     @DeleteMapping("/remove")
     @ApiOperation("Remove Folder/File")
     @Log(title = "Remove Folder/File", businessType = BusinessType.DELETE)

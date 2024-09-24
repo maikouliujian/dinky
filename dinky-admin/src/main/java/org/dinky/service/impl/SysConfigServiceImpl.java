@@ -71,7 +71,7 @@ public class SysConfigServiceImpl extends SuperServiceImpl<SysConfigMapper, SysC
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("No such configuration: " + key));
     }
-
+    //todo 初始化系统配置【表：dinky_sys_config】
     @Override
     public void initSysConfig() {
         SystemConfiguration systemConfiguration = SystemConfiguration.getInstances();
@@ -92,6 +92,7 @@ public class SysConfigServiceImpl extends SuperServiceImpl<SysConfigMapper, SysC
                 .forEach(Model::insertOrUpdate);
         Map<String, String> configMap =
                 CollUtil.toMap(list(), new HashMap<>(), SysConfig::getName, SysConfig::getValue);
+        //todo 通过数据库配置赋值给sysconfig
         systemConfiguration.initSetConfiguration(configMap);
     }
 

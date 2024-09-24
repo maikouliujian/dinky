@@ -155,20 +155,21 @@ public class ResourceServiceImpl extends ServiceImpl<ResourcesMapper, Resources>
         byId.setDescription(desc);
         byId.setFileName(fileName);
         byId.setFullName(fullName);
+        //todo 更新数据库信息
         updateById(byId);
         boolean isRunStorageMove = false;
-        if (!byId.getIsDirectory()) {
+        if (byId.getIsDirectory()) {
             List<Resources> list = list(new LambdaQueryWrapper<Resources>().eq(Resources::getPid, byId.getId()));
             if (CollUtil.isNotEmpty(list)) {
                 for (Resources resources : list) {
                     resources.setFullName(fullName + "/" + resources.getFileName());
-                    isRunStorageMove = !resources.getIsDirectory() && !isRunStorageMove;
+                    isRunStorageMove = !resources.getIsDirectory();
                 }
                 updateBatchById(list);
             }
         } else {
             isRunStorageMove = true;
-            if (!isExistsChildren(id)) {
+            if (isExistsChildren(id)) {
                 return;
             }
         }
@@ -315,7 +316,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourcesMapper, Resources>
                 pResource,
                 size);
     }
-
+    //todo 资源删除，只是逻辑删除，并没做物理删除！！！！！！
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean remove(Integer id) {

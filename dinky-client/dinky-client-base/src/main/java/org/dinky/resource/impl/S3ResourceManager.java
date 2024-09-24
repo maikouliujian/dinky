@@ -136,7 +136,7 @@ public class S3ResourceManager implements BaseResourceManager {
     @Override
     public InputStream readFile(String path) {
         return getS3Template()
-                .getObject(getS3Template().getBucketName(), removeFirstSlash(path));
+                .getObject(getS3Template().getBucketName(), removeFirstSlash(getFilePath(path)));
     }
 
     public S3Template getS3Template() {
