@@ -129,8 +129,7 @@ public class SystemInit implements ApplicationRunner {
                         systemConfiguration.getResourcesOssRegion(),
                         systemConfiguration.getResourcesPathStyleAccess())
                 .forEach(x -> x.addParameterCheck(y -> {
-                    if (Boolean.TRUE.equals(
-                            systemConfiguration.getResourcesEnable().getValue())) {
+                    if (x == systemConfiguration.getResourcesEnable() && Boolean.parseBoolean(String.valueOf(y))) {
                         try {
                             BaseResourceManager.initResourceManager();
                         } catch (Exception e) {
