@@ -38,7 +38,7 @@ export default () => {
   const lastHeartTime = useRef<number>(0);
   const subscriberRef = useRef<SubscriberData[]>([]);
   const [eventSource, setEventSource] = useState<EventSource>();
-
+  //todo sse连接
   const reconnectSse = () => {
     lastHeartTime.current = Date.now();
     uuidRef.current = uuidv4();
@@ -46,7 +46,7 @@ export default () => {
     eventSource?.close();
     setEventSource(new EventSource(sseUrl));
   };
-
+//todo sse订阅
   const subscribe = async () => {
     const topics: string[] = [];
     subscriberRef.current.forEach((sub) => topics.push(...sub.topic));

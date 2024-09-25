@@ -46,7 +46,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @SaCheckLogin
 public class SseController {
-
+    //todo sse 订阅
     @PostMapping(value = "/subscribeTopic")
     @ApiOperation("subscribeTopic")
     @ApiImplicitParam(name = "topics", value = "topics", required = true, dataType = "List")
@@ -54,7 +54,7 @@ public class SseController {
         Set<String> b = SseSessionContextHolder.subscribeTopic(subscribeDTO.getSessionKey(), subscribeDTO.getTopics());
         return Result.succeed(b, Status.SUCCESS);
     }
-
+    //todo sse 连接
     @GetMapping(value = "/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @ApiOperation("Connect Sse")
     @ApiImplicitParam(name = "sessionKey", value = "Session unique key", required = true, dataType = "String")

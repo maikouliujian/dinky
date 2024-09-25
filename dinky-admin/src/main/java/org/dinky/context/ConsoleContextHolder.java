@@ -150,6 +150,7 @@ public class ConsoleContextHolder {
         //   /TOPIC/PROCESS_CONSOLE/FlinkSubmit/12
         String topic = StrFormatter.format("{}/{}", SseTopic.PROCESS_CONSOLE.getValue(), processName);
         CompletableFuture.runAsync(() -> {
+            //todo 后端一些有用日志推送到前端，如maven编译日志
             SseSessionContextHolder.sendTopic(topic, process);
         });
     }

@@ -37,7 +37,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-
+//todo SSE: Server-Sent Events
 @Slf4j
 @Data
 public class SseSessionContextHolder {
