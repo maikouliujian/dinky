@@ -301,6 +301,7 @@ public class GitController {
      * @param id {@link Integer}
      * @return {@link Result} of {@link Void}
      */
+    //todo 获取maven build日志
     @GetMapping(path = "/build-step-logs", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @Log(title = "GitProject Build Step Logs", businessType = BusinessType.QUERY)
     @ApiOperation("GitProject Build Step Logs")
@@ -318,7 +319,7 @@ public class GitController {
         Dict params = new Dict();
         File logDir = FileUtil.file(GitRepository.getProjectDir(gitProject.getName()), gitProject.getBranch() + "_log");
         params.set("gitProject", gitProject).set("logDir", logDir);
-
+        //todo 推送日志
         GitProjectStepSseFactory.observe(emitter, gitProject, params);
 
         return emitter;
