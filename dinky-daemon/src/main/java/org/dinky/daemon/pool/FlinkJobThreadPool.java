@@ -58,7 +58,7 @@ public class FlinkJobThreadPool implements ThreadPool {
     public static FlinkJobThreadPool getInstance() {
         return DefaultThreadPoolHolder.defaultThreadPool;
     }
-
+    //todo 执行
     @Override
     public void execute(DaemonTask daemonTask) {
         if (daemonTask != null) {
@@ -72,7 +72,7 @@ public class FlinkJobThreadPool implements ThreadPool {
         resizeWorkers(queue.getTaskSize() / 10);
         return removed;
     }
-
+    //todo 调整worker线程数量
     private void resizeWorkers(int afterNum) {
         synchronized (lock) {
             int workerNum = this.workerNum.get();
@@ -81,6 +81,7 @@ public class FlinkJobThreadPool implements ThreadPool {
             afterNum = Math.max(afterNum, MIN_WORKER_NUM);
 
             if (afterNum > workerNum) {
+                //todo 添加worker线程
                 addWorkers(afterNum - workerNum);
             } else if (afterNum < workerNum) {
                 removeWorker(workerNum - afterNum);
@@ -98,6 +99,7 @@ public class FlinkJobThreadPool implements ThreadPool {
                 }
             }
             for (int i = 0; i < num; i++) {
+                //todo 所有的TaskWorker共同处理DaemonTask queue
                 TaskWorker worker = new TaskWorker(queue);
                 workers.add(worker);
                 Thread thread = new Thread(worker, "ThreadPool-Worker-" + workerNum.incrementAndGet());

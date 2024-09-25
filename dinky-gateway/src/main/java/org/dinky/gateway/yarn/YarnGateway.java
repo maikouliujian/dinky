@@ -296,7 +296,7 @@ public abstract class YarnGateway extends AbstractGateway {
         }
         return applicationId;
     }
-
+    //todo 追踪任务状态
     @Override
     public JobStatus getJobStatusById(String id) {
         if (Asserts.isNull(yarnClient)) {
@@ -459,7 +459,7 @@ public abstract class YarnGateway extends AbstractGateway {
     public boolean close() {
         return FileUtil.del(TMP_SQL_EXEC_DIR);
     }
-
+    //todo 从zk中获取最新一次JobManageHost！！！！！！
     @Override
     public String getLatestJobManageHost(String appId, String oldJobManagerHost) {
         initConfig();

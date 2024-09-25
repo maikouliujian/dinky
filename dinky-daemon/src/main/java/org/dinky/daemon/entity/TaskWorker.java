@@ -51,9 +51,11 @@ public class TaskWorker implements Runnable {
     public void run() {
         log.debug("TaskWorker run:" + Thread.currentThread().getName());
         while (running) {
+            //todo 从队列中取出daemonTask
             DaemonTask daemonTask = queue.getNext();
             if (daemonTask != null) {
                 try {
+                    //todo FlinkJobTask执行
                     boolean done = daemonTask.dealTask();
                     if (done) {
                         FlinkJobThreadPool.getInstance().removeByTaskConfig(daemonTask.getConfig());

@@ -104,6 +104,7 @@ public class SystemInit implements ApplicationRunner {
         for (Tenant tenant : tenants) {
             taskService.initDefaultFlinkSQLEnv(tenant.getId());
         }
+        //todo 初始化后台任务线程，如追踪flink task状态！！！！！！
         initDaemon();
         initDolphinScheduler();
         registerUDF();
@@ -145,12 +146,15 @@ public class SystemInit implements ApplicationRunner {
     private void initDaemon() {
         // Init clear job history task
         DaemonTask clearJobHistoryTask = DaemonTask.build(new DaemonTaskConfig(ClearJobHistoryTask.TYPE));
+        //todo 一小时清理一次历史任务
         schedule.addSchedule(clearJobHistoryTask, new PeriodicTrigger(1, TimeUnit.HOURS));
 
         // Add flink running job task to flink job thread pool
+        //todo 取出所有在运行中的任务【数据库中的状态】
         List<JobInstance> jobInstances = jobInstanceService.listJobInstanceActive();
         FlinkJobThreadPool flinkJobThreadPool = FlinkJobThreadPool.getInstance();
         for (JobInstance jobInstance : jobInstances) {
+            //todo jobInstance.getId() === dinky task id
             DaemonTaskConfig config = new DaemonTaskConfig(FlinkJobTask.TYPE, jobInstance.getId());
             DaemonTask daemonTask = DaemonTask.build(config);
             flinkJobThreadPool.execute(daemonTask);

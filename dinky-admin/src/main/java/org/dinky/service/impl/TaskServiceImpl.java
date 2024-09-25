@@ -391,6 +391,7 @@ public class TaskServiceImpl extends SuperServiceImpl<TaskMapper, Task> implemen
             JobInstance jobInstance = jobInstanceService.getById(task.getJobInstanceId());
             DinkyAssert.checkNull(jobInstance, Status.JOB_INSTANCE_NOT_EXIST);
             String status = jobInstance.getStatus();
+            //todo 如果任务非done，则先停止任务
             if (!JobStatus.isDone(status)) {
                 log.info("JobInstance [{}] status is [{}], stop it now", jobInstance.getName(), status);
                 JobManager jobManager = JobManager.build(buildJobConfig(task));
@@ -407,6 +408,7 @@ public class TaskServiceImpl extends SuperServiceImpl<TaskMapper, Task> implemen
                 }
                 int count = 0;
                 while (true) {
+                    //todo 刷新任务状态
                     JobInfoDetail jobInfoDetail = jobInstanceService.refreshJobInfoDetail(jobInstance.getId(), false);
                     if (JobStatus.isDone(jobInfoDetail.getInstance().getStatus())) {
                         log.info(
@@ -426,6 +428,7 @@ public class TaskServiceImpl extends SuperServiceImpl<TaskMapper, Task> implemen
                 }
             }
         }
+        //todo 重新提交任务
         return submitTask(
                 TaskSubmitDto.builder().id(id).savePointPath(savePointPath).build());
     }

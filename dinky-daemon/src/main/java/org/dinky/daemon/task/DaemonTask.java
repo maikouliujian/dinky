@@ -32,6 +32,7 @@ public interface DaemonTask {
         Asserts.checkNotNull(config, Status.DAEMON_TASK_CONFIG_NOT_EXIST.getMessage());
         ServiceLoader<DaemonTask> daemonTasks = ServiceLoader.load(DaemonTask.class);
         for (DaemonTask daemonTask : daemonTasks) {
+            //todo 找到对应的daemonTask
             if (daemonTask.canHandle(config.getType())) {
                 return Optional.of(daemonTask.setConfig(config));
             }
@@ -40,6 +41,7 @@ public interface DaemonTask {
     }
 
     static DaemonTask build(DaemonTaskConfig config) {
+        //todo 获取DaemonTask
         Optional<DaemonTask> optionalDaemonTask = DaemonTask.get(config);
         if (!optionalDaemonTask.isPresent()) {
             throw new DaemonTaskException(Status.DAEMON_TASK_NOT_SUPPORT.getMessage() + config.getType());

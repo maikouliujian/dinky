@@ -93,6 +93,7 @@ public class JobRefreshHandler {
      * @param needSave      Indicates if the job needs to be saved.
      * @return True if the job is done, false otherwise.
      */
+    //todo 刷新任务状态
     public static boolean refreshJob(JobInfoDetail jobInfoDetail, boolean needSave) {
         log.debug(
                 "Start to refresh job: {}->{}",
@@ -123,6 +124,7 @@ public class JobRefreshHandler {
                 CopyOptions.create().ignoreNullValue());
 
         if (Asserts.isNull(jobDataDto.getJob()) || jobDataDto.isError()) {
+            //todo 追踪任务状态
             Optional<JobStatus> jobStatus = getJobStatus(jobInfoDetail);
             if (jobStatus.isPresent() && JobStatus.isDone(jobStatus.get().getValue())) {
                 jobInstance.setStatus(jobStatus.get().getValue());
@@ -290,6 +292,7 @@ public class JobRefreshHandler {
                         .setJobName(jobInfoDetail.getInstance().getName());
 
                 Gateway gateway = Gateway.build(gatewayConfig);
+                //todo 追踪任务状态！！！！！！
                 return Optional.of(gateway.getJobStatusById(appId));
             } catch (NotSupportGetStatusException ignored) {
                 // if the gateway does not support get status, then use the api to get job status
@@ -311,10 +314,12 @@ public class JobRefreshHandler {
 
         if (GatewayType.isDeployCluster(clusterType)) {
             JobConfig jobConfig = new JobConfig();
+            //todo 集群配置在数据库中有存储
             FlinkClusterConfig configJson = jobDataDto.getClusterConfiguration().getConfigJson();
             jobConfig.buildGatewayConfig(configJson);
             jobConfig.getGatewayConfig().setType(GatewayType.get(clusterType));
             jobConfig.getGatewayConfig().getFlinkConfig().setJobName(jobInstance.getName());
+            //todo 任务完成的回调
             Gateway.build(jobConfig.getGatewayConfig()).onJobFinishCallback(jobInstance.getStatus());
         }
     }

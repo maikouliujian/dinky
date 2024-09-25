@@ -97,10 +97,11 @@ public class FlinkJobTask implements DaemonTask {
      *
      * @return Returns true if the job has completed, otherwise returns false
      */
+    //todo 状态追踪
     @Override
     public boolean dealTask() {
         volatilityBalance();
-
+        //todo 刷新任务状态
         boolean isDone = JobRefreshHandler.refreshJob(jobInfoDetail, isNeedSave());
         if (Asserts.isAllNotNull(jobInfoDetail.getClusterInstance())) {
             JobAlertHandler.getInstance().check(jobInfoDetail);
