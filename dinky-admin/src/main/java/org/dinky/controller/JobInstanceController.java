@@ -315,7 +315,7 @@ public class JobInstanceController {
             @RequestParam String metrics) {
         return Result.succeed(FlinkAPI.build(address).getJobMetricsData(jobId, verticeId, metrics));
     }
-
+    //todo application模式下的状态追踪
     @GetMapping("/hookJobDone")
     @ApiOperation("hookJobDone")
     @SaIgnore

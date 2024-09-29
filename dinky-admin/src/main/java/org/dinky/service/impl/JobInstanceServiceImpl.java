@@ -216,7 +216,7 @@ public class JobInstanceServiceImpl extends SuperServiceImpl<JobInstanceMapper, 
             return getJobInfoDetail(jobInstanceId);
         }
     }
-
+    //todo application模式下的状态追踪
     @Override
     public boolean hookJobDone(String jobId, Integer taskId) {
         LambdaQueryWrapper<JobInstance> queryWrapper = new LambdaQueryWrapper<>();

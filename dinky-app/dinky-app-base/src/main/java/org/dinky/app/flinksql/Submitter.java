@@ -148,7 +148,7 @@ public class Submitter {
         } finally {
             log.info("Start Monitor Job");
             if (jobClient.isPresent()) {
-                // todo 监听flink作业状态
+                // todo application模式 监听flink作业状态
                 FlinkAppUtil.monitorFlinkTask(jobClient.get(), config.getTaskId());
             } else {
                 log.error("jobClient is empty, can not  monitor job");

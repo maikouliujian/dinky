@@ -124,7 +124,7 @@ public class JobRefreshHandler {
                 CopyOptions.create().ignoreNullValue());
 
         if (Asserts.isNull(jobDataDto.getJob()) || jobDataDto.isError()) {
-            //todo 追踪任务状态
+            //todo 追踪任务状态！！！！！！
             Optional<JobStatus> jobStatus = getJobStatus(jobInfoDetail);
             if (jobStatus.isPresent() && JobStatus.isDone(jobStatus.get().getValue())) {
                 jobInstance.setStatus(jobStatus.get().getValue());
@@ -280,6 +280,7 @@ public class JobRefreshHandler {
 
         ClusterConfigurationDTO clusterCfg = jobInfoDetail.getClusterConfiguration();
         ClusterInstance clusterInstance = jobInfoDetail.getClusterInstance();
+        //todo 这里为何只有YARN_PER_JOB？？？？？？
         if (!Asserts.isNull(clusterCfg)
                 && GatewayType.YARN_PER_JOB.getLongValue().equals(clusterInstance.getType())) {
             try {
@@ -336,7 +337,7 @@ public class JobRefreshHandler {
         if (!GatewayType.isDeployYarnCluster(jobInfoDetail.getClusterInstance().getType())) {
             return;
         }
-
+        //todo 对jobmanager进行心跳检测
         FlinkClusterInfo flinkClusterInfo = clusterInstanceService.checkHeartBeat(
                 jobInfoDetail.getClusterInstance().getHosts(),
                 jobInfoDetail.getClusterInstance().getJobManagerHost());
@@ -353,6 +354,7 @@ public class JobRefreshHandler {
                         .setJobName(jobInfoDetail.getInstance().getName());
 
                 Gateway gateway = Gateway.build(gatewayConfig);
+                //todo 从zk中获取上一次的JobManageHost
                 String latestJobManageHost = gateway.getLatestJobManageHost(appId, clusterInstance.getJobManagerHost());
 
                 if (Asserts.isNotNull(latestJobManageHost)) {

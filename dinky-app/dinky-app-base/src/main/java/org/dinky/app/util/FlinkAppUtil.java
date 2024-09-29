@@ -75,7 +75,7 @@ public class FlinkAppUtil {
             log.error("hook failed:", e);
         }
     }
-
+    //todo 针对application模式下task的状态追踪
     public static void monitorFlinkTask(JobClient jobClient, int taskId) {
         boolean isRun = true;
         String jobId = jobClient.getJobID().toHexString();
@@ -84,6 +84,7 @@ public class FlinkAppUtil {
                 String jobStatus = jobClient.getJobStatus().get().toString();
                 JobStatus status = JobStatus.get(jobStatus);
                 if (status.isDone()) {
+                    //todo 监听状态的钩子函数
                     sendHook(taskId, jobId, 0);
                     log.info("refesh job status finished, status is {}", status);
                     isRun = false;
@@ -105,7 +106,9 @@ public class FlinkAppUtil {
      * If the retry limit is exceeded, an exception is thrown.
      */
     private static void sendHook(int taskId, String jobId, int reTryCount) {
+        //todo 这类需要配置dinkyAddr！！！！！！！
         String dinkyAddr = SystemConfiguration.getInstances().getDinkyAddr().getValue();
+        //todo 调用dinky的接口
         String url = StrFormatter.format("{}/api/jobInstance/hookJobDone?taskId={}&jobId={}", dinkyAddr, taskId, jobId);
         try {
             String resultStr = HttpUtil.get(url, 5000);

@@ -213,6 +213,7 @@ public class Job2MysqlHandler extends AbsJobHandler {
                 .build();
         jobHistoryService.save(jobHistory);
         DaemonTaskConfig taskConfig = DaemonTaskConfig.build(FlinkJobTask.TYPE, jobInstance.getId());
+        //todo 状态追踪
         FlinkJobThreadPool.getInstance().execute(DaemonTask.build(taskConfig));
         return true;
     }

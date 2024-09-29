@@ -96,7 +96,7 @@ public enum JobStatus {
                 .findFirst()
                 .orElse(JobStatus.UNKNOWN);
     }
-
+    //todo 非done的job才进行状态追踪，比如running和RECONNECTING
     public static boolean isDone(String value) {
         switch (get(value)) {
             case FAILED:
@@ -118,7 +118,7 @@ public enum JobStatus {
                 return false;
         }
     }
-
+    //todo 非done的job才进行状态追踪，比如running和RECONNECTING
     public boolean isDone() {
         switch (this) {
             case FAILED:
