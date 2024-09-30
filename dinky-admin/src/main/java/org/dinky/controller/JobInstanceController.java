@@ -154,7 +154,7 @@ public class JobInstanceController {
     }
 
     /**
-     * 刷新Job实例的所有信息
+     * todo 刷新Job实例的所有信息
      */
     @GetMapping("/refreshJobInfoDetail")
     @ApiOperation("Refresh job info detail")
