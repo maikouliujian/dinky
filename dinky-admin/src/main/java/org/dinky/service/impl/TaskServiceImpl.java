@@ -188,7 +188,7 @@ public class TaskServiceImpl extends SuperServiceImpl<TaskMapper, Task> implemen
         log.info("Start check and config task, task:{}", task.getName());
 
         DinkyAssert.check(task);
-
+        //todo 设置savepoint路径
         if (StringUtils.isNotBlank(submitDto.getSavePointPath())) {
             task.setSavePointStrategy(SavePointStrategy.CUSTOM.getValue());
             task.setSavePointPath(submitDto.getSavePointPath());

@@ -350,6 +350,11 @@ public abstract class YarnGateway extends AbstractGateway {
         }
     }
 
+    @Override
+    public boolean onJobFinishCallback(String status) {
+        return true;
+    }
+
     protected YarnClusterDescriptor createYarnClusterDescriptorWithJar(FlinkUdfPathContextHolder udfPathContextHolder) {
         YarnClusterDescriptor yarnClusterDescriptor = createInitYarnClusterDescriptor();
         ClusterDescriptorAdapterImpl clusterDescriptorAdapter = new ClusterDescriptorAdapterImpl(yarnClusterDescriptor);

@@ -102,6 +102,7 @@ public class JobRefreshHandler {
 
         JobInstance jobInstance = jobInfoDetail.getInstance();
         JobDataDto jobDataDto = jobInfoDetail.getJobDataDto();
+        //todo 本地状态
         String oldStatus = jobInstance.getStatus();
 
         // Cluster information is missing and cannot be monitored
@@ -282,7 +283,8 @@ public class JobRefreshHandler {
         ClusterInstance clusterInstance = jobInfoDetail.getClusterInstance();
         //todo 这里为何只有YARN_PER_JOB？？？？？？
         if (!Asserts.isNull(clusterCfg)
-                && GatewayType.YARN_PER_JOB.getLongValue().equals(clusterInstance.getType())) {
+                && GatewayType.YARN_PER_JOB.getLongValue().equals(clusterInstance.getType())
+                || GatewayType.YARN_APPLICATION.getLongValue().equals(clusterInstance.getType())) {
             try {
                 String appId = jobInfoDetail.getClusterInstance().getName();
 
