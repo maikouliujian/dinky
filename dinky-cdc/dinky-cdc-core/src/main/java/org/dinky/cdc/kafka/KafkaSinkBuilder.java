@@ -73,6 +73,7 @@ import java.util.stream.Collectors;
 /**
  * MysqlCDCBuilder
  **/
+//todo kafka sink
 public class KafkaSinkBuilder extends AbstractSinkBuilder implements Serializable {
 
     public static final String KEY_WORD = "datastream-kafka";
@@ -100,7 +101,7 @@ public class KafkaSinkBuilder extends AbstractSinkBuilder implements Serializabl
     public SinkBuilder create(FlinkCDCConfig config) {
         return new KafkaSinkBuilder(config);
     }
-
+    //todo sink逻辑入口
     @Override
     public DataStreamSource build(
             CDCBuilder cdcBuilder,
@@ -108,6 +109,7 @@ public class KafkaSinkBuilder extends AbstractSinkBuilder implements Serializabl
             CustomTableEnvironment customTableEnvironment,
             DataStreamSource<String> dataStreamSource) {
         Properties kafkaProducerConfig = getProperties();
+        //todo 明确topic的配置，则发送到该topic
         if (Asserts.isNotNullString(config.getSink().get("topic"))) {
             org.apache.flink.connector.kafka.sink.KafkaSinkBuilder<String> kafkaSinkBuilder =
                     KafkaSink.<String>builder()
@@ -129,6 +131,7 @@ public class KafkaSinkBuilder extends AbstractSinkBuilder implements Serializabl
             KafkaSink<String> kafkaSink = kafkaSinkBuilder.build();
             dataStreamSource.sinkTo(kafkaSink);
         } else {
+            //todo 没有明确topic的配置【sink.topic】，所有Change Log会被写入对应库表名的topic
             Map<Table, OutputTag<String>> tagMap = new LinkedHashMap<>();
             Map<String, Table> tableMap = new LinkedHashMap<>();
             ObjectMapper objectMapper = new ObjectMapper();
@@ -149,6 +152,7 @@ public class KafkaSinkBuilder extends AbstractSinkBuilder implements Serializabl
                     List<Table> tableList = schema.getTables().stream()
                             .sorted(Comparator.comparing(Table::getName))
                             .collect(Collectors.toList());
+                    //todo 构建OutputTag
                     for (Table table : tableList) {
                         String sinkTableName = getSinkTableName(table);
                         OutputTag<String> outputTag = new OutputTag<String>(sinkTableName) {};
@@ -168,6 +172,7 @@ public class KafkaSinkBuilder extends AbstractSinkBuilder implements Serializabl
                                     tableMap.get(source.get(schemaFieldName).toString() + "."
                                             + source.get("table").toString());
                             OutputTag<String> outputTag = tagMap.get(table);
+                            //todo 将不同表的changlog数据写入不同的outputTag中
                             ctx.output(outputTag, result);
                         } catch (Exception e) {
                             out.collect(objectMapper.writeValueAsString(map));
@@ -175,7 +180,9 @@ public class KafkaSinkBuilder extends AbstractSinkBuilder implements Serializabl
                     }
                 });
                 tagMap.forEach((k, v) -> {
+                    //todo 获取sink topic
                     String topic = getSinkTableName(k);
+                    //todo 构建不同的sink
                     org.apache.flink.connector.kafka.sink.KafkaSinkBuilder<String> kafkaSinkBuilder =
                             KafkaSink.<String>builder()
                                     .setBootstrapServers(config.getSink().get("brokers"))
@@ -195,6 +202,7 @@ public class KafkaSinkBuilder extends AbstractSinkBuilder implements Serializabl
                                 kafkaProducerConfig.getProperty("transactional.id") + "-" + topic);
                     }
                     KafkaSink<String> kafkaSink = kafkaSinkBuilder.build();
+                    //todo 将不同的SideOutput写入对应的topic中
                     process.getSideOutput(v).rebalance().sinkTo(kafkaSink).name(topic);
                 });
             }

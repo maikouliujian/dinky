@@ -30,6 +30,7 @@ import org.junit.Test;
 /** @since 0.6.8 */
 public class CdcSourceTests {
 
+
     @Ignore
     @Test
     public void printTest() throws Exception {

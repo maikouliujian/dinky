@@ -48,8 +48,10 @@ public class FlinkInterceptor {
     public static FlinkInterceptorResult build(Executor executor, String statement) {
         boolean noExecute = false;
         TableResult tableResult = null;
+        //todo 解析Operation
         Operation operation = Operations.buildOperation(statement);
         if (Asserts.isNotNull(operation)) {
+            //todo 执行Operation
             tableResult = operation.execute(executor);
             noExecute = operation.noExecute();
         }

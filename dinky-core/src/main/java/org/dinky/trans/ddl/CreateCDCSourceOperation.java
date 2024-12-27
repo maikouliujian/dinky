@@ -52,6 +52,7 @@ import java.util.stream.Collectors;
  *
  * @since 2022/1/29 23:25
  */
+//todo EXECUTE CDCSOURCE !!!!!!
 public class CreateCDCSourceOperation extends AbstractOperation implements Operation {
 
     private static final String KEY_WORD = "EXECUTE CDCSOURCE";
@@ -188,8 +189,10 @@ public class CreateCDCSourceOperation extends AbstractOperation implements Opera
                 streamExecutionEnvironment.enableCheckpointing(config.getCheckpoint());
                 logger.info("Set checkpoint: {}", config.getCheckpoint());
             }
+            //todo source：获取数据
             DataStreamSource<String> streamSource = cdcBuilder.build(streamExecutionEnvironment);
             logger.info("Build {} successful...", config.getType());
+            //todo sink：消费数据
             sinkBuilder.build(
                     cdcBuilder, streamExecutionEnvironment, executor.getCustomTableEnvironment(), streamSource);
             logger.info("Build CDCSOURCE Task successful!");

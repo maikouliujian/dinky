@@ -43,6 +43,7 @@ public class SingleSqlParserFactory {
         sql = sql.replace("\r\n", " ").replace("\n", " ") + " ENDOFSQL";
         if (contains(sql, "(insert\\s+into)(.+)(select)(.+)(from)(.+)")) {
             tmp = new InsertSelectSqlParser(sql);
+            //todo 解析execute cdcsource
         } else if (contains(sql, "(execute\\s+cdcsource)")) {
             tmp = new CreateCDCSourceSqlParser(sql);
         } else if (contains(sql, "(select)(.+)(from)(.+)")) {

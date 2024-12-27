@@ -97,7 +97,7 @@ public class MysqlCDCBuilder extends AbstractCDCBuilder {
                 jdbcProperties.setProperty(key, value);
             }
         });
-
+        //todo flinkcdc connector
         MySqlSourceBuilder<String> sourceBuilder = MySqlSource.<String>builder()
                 .hostname(config.getHostname())
                 .port(config.getPort())
@@ -106,6 +106,7 @@ public class MysqlCDCBuilder extends AbstractCDCBuilder {
 
         String database = config.getDatabase();
         if (Asserts.isNotNullString(database)) {
+            //todo 多库同步
             String[] databases = database.split(FlinkParamConstant.SPLIT);
             sourceBuilder.databaseList(databases);
         } else {
@@ -114,15 +115,18 @@ public class MysqlCDCBuilder extends AbstractCDCBuilder {
 
         List<String> schemaTableNameList = config.getSchemaTableNameList();
         if (Asserts.isNotNullCollection(schemaTableNameList)) {
+            //todo 可以多表同步
             sourceBuilder.tableList(schemaTableNameList.toArray(new String[0]));
         } else {
             sourceBuilder.tableList();
         }
 
         sourceBuilder.deserializer(new JsonDebeziumDeserializationSchema());
+        //todo 设置debezium配置
         sourceBuilder.debeziumProperties(debeziumProperties);
+        //todo 设置jdbc配置
         sourceBuilder.jdbcProperties(jdbcProperties);
-
+        //todo 启动模式
         if (Asserts.isNotNullString(config.getStartupMode())) {
             switch (config.getStartupMode().toLowerCase()) {
                 case "initial":
@@ -205,7 +209,7 @@ public class MysqlCDCBuilder extends AbstractCDCBuilder {
         if (Asserts.isEqualsIgnoreCase(schemaChanges, "true")) {
             sourceBuilder.includeSchemaChanges(true);
         }
-
+        //todo mysql cdc source
         return env.fromSource(sourceBuilder.build(), WatermarkStrategy.noWatermarks(), "MySQL CDC Source");
     }
 
